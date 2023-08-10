@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "build": "node build.mjs",
-    "test": "vitest run --mode single-run"
+    "test": "vitest --run"
   },
   "keywords": [],
   "author": "",

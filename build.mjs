@@ -57,26 +57,31 @@ async function getChangedFiles(files) {
   return changedFiled;
 }
 
-async function main() {
+async function getFileNames() {
   const fileNames = await fs.readdir('exercises');
-  let changedFiles = await getChangedFiles(fileNames);
-  if (!changedFiles.length) {
-    console.log('no changes detected.');
-    return;
-  }
+  const changedFiles = await getChangedFiles(fileNames);
 
   const fileNameFilter = process.argv[2];
   
   if (fileNameFilter) {
     const regex = new RegExp(fileNameFilter, 'i');
-    changedFiles = changedFiles.filter(fileName => regex.test(fileName));
+    return changedFiles.filter(fileName => regex.test(fileName));
   }
-  console.log(changedFiles)
+  return changedFiles;
+}
+
+async function main() {
+  const fileNames = await getFileNames();
+  
+  if (!fileNames.length) {
+    console.log('no changes detected.');
+    return;
+  }
 
   const wabt = await Wabt();
 
   const cachePath = new URL('./.cache/cache.txt', import.meta.url);
-  const cacheFileHandle = await fs.open(cachePath, 'w')
+  const cacheFileHandle = await fs.open(cachePath, 'a')
 
   await Promise.all(fileNames.map(async file => {
     const filePath = new URL('./exercises/' + file, import.meta.url);
@@ -107,7 +112,7 @@ async function main() {
 
   await cacheFileHandle.close();
 
-  console.log('compiled all files');
+  console.log(`compiled ${fileNames.length} files`);
 }
 
 main();

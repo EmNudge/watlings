@@ -2,7 +2,11 @@
 
 Learn WebAssembly Text Format by fixing a bunch of small programs!
 
-These programs assume very little familiarity with WebAssembly. 
+We assume very little familiarity with WebAssembly. 
+
+## 🚧 Caution
+This project is incomplete and in active development.
+Feel free to help out by filing issues and creating PRs!
 
 # Usage
 This project uses Node & npm for compilation and testing.
@@ -14,10 +18,9 @@ cd watlings
 npm i
 ```
 
-Files need to build before we can test them
+Test your answer to an exercise with the `./run.sh` script
 ```sh
-npm run build
-npm run test -- filename
+./run.sh hello
 ```
 
 # Motivations
