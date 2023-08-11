@@ -12,7 +12,7 @@
   (import "env" "log" (func $log_num (param i32)))
 
   (func $main
-    ;; call $log_num here
+    ;; TODO: call $log_num here
   )
 
   (start $main)

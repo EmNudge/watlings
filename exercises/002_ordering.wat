@@ -27,7 +27,7 @@
   (import "env" "log" (func $log_nums (param i32) (param i32) (param i32)))
 
   (func $main
-    ;; call $log_nums here
+    ;; TODO: call $log_nums here
   )
 
   (start $main)

@@ -19,6 +19,6 @@
     (call $log_num (i32.const 42))
   )
 
-  ;; replace this with an export
+  ;; TODO: replace this with an export
   (start $main)
 )

@@ -28,10 +28,11 @@
     (param $a i32) (param $b i32)
     (result i32)
 
+    ;; The last stack value is the return value
     (i32.add (local.get $a) (local.get $b))
   )
 
-  ;; fill in the blanks!
+  ;; TODO: fill in the blanks!
   (func $sub)
   (func $mul)
 

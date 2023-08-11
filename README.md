@@ -23,6 +23,26 @@ Test your answer to an exercise with the `./run.sh` script
 ./run.sh hello
 ```
 
+# Roadmap
+The following are planned and optional exercises.
+## Planned
+- [X] S-expressions
+- [X] Exporting
+- [X] Functions
+- [X] Variables
+- [ ] Number types
+- [ ] Conditionals
+- [ ] Loops
+- [ ] Data
+- [ ] Memory
+- [ ] Ref Types
+- [ ] Tables
+- [ ] Host Environment
+
+## Fast Follows
+- [ ] SIMD
+- [ ] GC
+
 # Motivations
 I've found just diving in to be the best way to build experience with programming. [Rustlings](https://github.com/rust-lang/rustlings) and [ziglings](https://github.com/ratfactor/ziglings) have both had tremendous returns to my journeys with both languages.
 
