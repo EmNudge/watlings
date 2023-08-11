@@ -2,7 +2,9 @@
 
 Learn WebAssembly Text Format by fixing a bunch of small programs!
 
-We assume very little familiarity with WebAssembly. 
+![watlings file 001_hello](https://github.com/EmNudge/watlings/assets/24513691/a720199d-75ce-41c5-84d6-014ef2b2eacd)
+![console output for failing test](https://github.com/EmNudge/watlings/assets/24513691/1aa1e029-f871-41d6-a5fd-44997d82b148)
+
 
 ## 🚧 Caution
 This project is incomplete and in active development.
