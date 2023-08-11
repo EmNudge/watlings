@@ -30,7 +30,7 @@ The following are planned and optional exercises.
 - [X] Exporting
 - [X] Functions
 - [X] Variables
-- [ ] Number types
+- [X] Number types
 - [ ] Conditionals
 - [ ] Loops
 - [ ] Data

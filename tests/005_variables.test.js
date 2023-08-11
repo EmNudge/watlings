@@ -1,6 +1,5 @@
 import { expect, test } from "vitest";
 import fs from "fs/promises";
-import exp from "constants";
 
 const { 1: baseName } = import.meta.url.match(/\/([^\/.]+)[^\/]+$/);
 const wasmBytes = await fs.readFile(`./.cache/${baseName}.wasm`);
