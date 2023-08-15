@@ -38,7 +38,7 @@ The following are planned and optional exercises.
 - [X] Functions
 - [X] Variables
 - [X] Number types
-- [ ] Conditionals
+- [X] Conditionals
 - [ ] Loops
 - [ ] Data
 - [ ] Memory
