@@ -46,7 +46,7 @@ The following are planned and optional exercises.
 - [X] Variables
 - [X] Number types
 - [X] Conditionals
-- [ ] Loops
+- [X] Loops
 - [ ] Data
 - [ ] Memory
 - [ ] Ref Types
