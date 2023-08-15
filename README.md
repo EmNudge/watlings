@@ -25,6 +25,11 @@ Test your answer to an exercise with the `./run.sh` script
 ./run.sh hello
 ```
 
+## Suggested Editor
+We recommend using [VS Code](https://code.visualstudio.com) with the [WATI](https://github.com/NateLevin1/wati) extension.
+
+This should provide syntax highlighting, intellisense, and other helpful features as you work through the exercises.
+
 # Roadmap
 The following are planned and optional exercises.
 ## Planned
@@ -48,7 +53,7 @@ The following are planned and optional exercises.
 # Motivations
 I've found just diving in to be the best way to build experience with programming. [Rustlings](https://github.com/rust-lang/rustlings) and [ziglings](https://github.com/ratfactor/ziglings) have both had tremendous returns to my journeys with both languages.
 
-WebAssembly (and by extention WAT) has a more sparse educational landscape than most and I was hoping to fill some of the gaps by building a project with the same sort of structure.
+WebAssembly (and by extension WAT) has a more sparse educational landscape than most and I was hoping to fill some of the gaps by building a project with the same sort of structure.
 
 ## Pedagogical Philosophy
 Outlined here are some thoughts on what makes a good teaching experience.
@@ -57,6 +62,8 @@ Outlined here are some thoughts on what makes a good teaching experience.
 The goal is to learn by doing. Comments on each file outline a task and some background. However, a lot about a language can be gleaned by its syntax alone. We should be adding **as little** explanation as possible. 
 
 Ocassional gaps in knowledge can be filled by consistent exposure to the syntax within different contexts. Certain things can therefore be learned without any mention.
+
+Introduction text is superfluous. Words add visual noise, so we should be careful with our count. Coding itself should supplement ambiguities in the text.
 
 If you find a text confusing or too verbose, **please create a discussion post**!
 
