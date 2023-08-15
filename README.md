@@ -25,6 +25,13 @@ Test your answer to an exercise with the `./run.sh` script
 ./run.sh hello
 ```
 
+## Using Wat2wasm Directly (recommended)
+For syntax highlighting and more up-to-date builds, you can **optionally** use the official [WebAssembly Binary toolkit](https://github.com/WebAssembly/wabt) which will provide you with a `wat2wasm` CLI tool.
+
+If it is available on your path as `wat2wasm`, it will be used instead of [npm wabt](https://www.npmjs.com/package/wabt).
+
+It should help with debugging, but it is strictly optional.
+
 ## Suggested Editor
 We recommend using [VS Code](https://code.visualstudio.com) with the [WATI](https://github.com/NateLevin1/wati) extension.
 

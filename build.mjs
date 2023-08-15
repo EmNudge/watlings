@@ -1,6 +1,8 @@
 import Wabt from 'wabt';
 import fs from 'node:fs/promises';
 import { webcrypto } from 'node:crypto';
+import { exec, spawn } from 'node:child_process';
+import { promisify } from 'node:util';
 
 /**
  * Get SHA-1 hash of file - used for detecting updates
@@ -57,6 +59,52 @@ async function getChangedFiles(files) {
   return changedFiled;
 }
 
+/**
+ * @returns {Promise<(filePath: string) => Promise<undefined>>}
+ */
+async function getWastParser() {
+  try {
+    // check if program exists
+    await promisify(exec)('wat2wasm --version');
+
+    return async (filePath) => {
+      const fileName = filePath.match(/\/([^\/]+)\.wat$/)[1];
+      const wasmPath = new URL('./.cache/' + fileName + '.wasm', import.meta.url).pathname;
+
+      return new Promise((res, rej) => {
+        spawn('wat2wasm', [filePath, '-o', wasmPath], { stdio:'inherit' })
+          .on('close', (err) => {
+            if (err !== 1) {
+              res();
+            } else {
+              rej(err);
+            }
+          });
+      });
+    }
+  } catch {
+    const wabt = await Wabt();
+
+    return async (filePath) => {
+      const fileName = filePath.match(/\/([^\/]+)\.wat$/)[1];
+      const wasmPath = new URL('./.cache/' + fileName + '.wasm', import.meta.url);
+
+      const fileBytes = await fs.readFile(filePath);
+
+      const wasmFile = wabt.parseWat('inline', fileBytes, {
+        mutable_globals: true,
+        sat_float_to_int: true,
+        sign_extension: true,
+        bulk_memory: true,
+      });
+
+      const { buffer } = wasmFile.toBinary({ write_debug_names: true });
+      
+      await fs.writeFile(wasmPath, buffer);
+    }
+  }
+}
+
 async function getFileNames() {
   const fileNames = await fs.readdir('exercises');
   const changedFiles = await getChangedFiles(fileNames);
@@ -78,41 +126,32 @@ async function main() {
     return;
   }
 
-  const wabt = await Wabt();
+  const parseWast = await getWastParser();
 
   const cachePath = new URL('./.cache/cache.txt', import.meta.url);
   const cacheFileHandle = await fs.open(cachePath, 'a')
 
+  let successCount = 0;
   await Promise.all(fileNames.map(async file => {
     const filePath = new URL('./exercises/' + file, import.meta.url);
-    const fileBytes = await fs.readFile(filePath);
-
+    
     try {
-      const wasmFile = wabt.parseWat('inline', fileBytes, {
-        mutable_globals: true,
-        sat_float_to_int: true,
-        sign_extension: true,
-        bulk_memory: true,
-      });
-
-      const compiledName = file.replace(/\.[^.]+?$/, '.wasm');
-      const wasmPath = new URL('./.cache/' + compiledName, import.meta.url);
-      const { buffer } = wasmFile.toBinary({ write_debug_names: true });
-      
-      await fs.writeFile(wasmPath, buffer);
+      await parseWast(filePath.pathname);
 
       // add WAT hash
+      const fileBytes = await fs.readFile(filePath);
       const hash = await getSha1Hash(fileBytes);
       cacheFileHandle.write(`${file}:${hash}\n`);
+      successCount++;
     } catch (e) {
-      console.error('Error at ' + filePath);
-      console.log(e);
+      console.error('Error at ' + filePath + ':', e);
+      process.exit(1);
     }
   }));
 
   await cacheFileHandle.close();
 
-  console.log(`compiled ${fileNames.length} files`);
+  console.log(`compiled ${successCount} files`);
 }
 
 main();
