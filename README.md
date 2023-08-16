@@ -48,7 +48,7 @@ The following are planned and optional exercises.
 - [X] Conditionals
 - [X] Loops
 - [X] Data
-- [ ] Memory
+- [X] Memory
 - [ ] Ref Types
 - [ ] Tables
 - [ ] Host Environment
