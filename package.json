@@ -1,16 +1,11 @@
 {
-  "name": "watlings",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "private": true,
   "type": "module",
   "scripts": {
+    "start": "bash run.sh",
     "build": "node build.mjs",
     "test": "vitest --run"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "devDependencies": {
     "vitest": "^0.34.1"
   },
