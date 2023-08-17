@@ -54,7 +54,7 @@ npm install
 Test your answer to an exercise with the `start` command:
 
 ```sh
-npm run start
+npm start 001_hello
 ```
 
 <br>
