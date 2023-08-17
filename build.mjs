@@ -62,12 +62,12 @@ async function getFileNames() {
   const changedFiles = await getChangedFiles(fileNames);
 
   const fileNameFilter = process.argv[2];
+  const regex = new RegExp(fileNameFilter ?? '', 'i');
   
-  if (fileNameFilter) {
-    const regex = new RegExp(fileNameFilter, 'i');
-    return changedFiles.filter(fileName => regex.test(fileName));
-  }
-  return changedFiles;
+  return changedFiles.filter(fileName => {
+    if (fileNameFilter && !regex.test(fileName)) return false;
+    return fileName.endsWith('.wat');
+  });
 }
 
 async function main() {
@@ -85,6 +85,13 @@ async function main() {
 
   let successCount = 0;
   await Promise.all(fileNames.map(async file => {
+    try {
+      const jsFilePath = new URL('./exercises/' + file.replace(/\.[^.]+$/, '.mjs'), import.meta.url);
+      await fs.access(jsFilePath);
+      console.log(`${file} has associated JS file`);
+      return;
+    } catch {}
+    
     const filePath = new URL('./exercises/' + file, import.meta.url);
     
     try {
@@ -96,7 +103,7 @@ async function main() {
       cacheFileHandle.write(`${file}:${hash}\n`);
       successCount++;
     } catch (e) {
-      console.error('Error at ' + filePath + ':', e);
+      console.error(`Error at ${filePath}:`, e);
       process.exit(1);
     }
   }));
