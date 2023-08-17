@@ -4,6 +4,8 @@
 ;; We import it from the namespace "env" under the name "log" and then call it $log_num
 ;;
 ;; Calling a function uses the syntax (call $func_name (param1) (param2) ...)
+;; Number literals use the form: (TYPE.const NUMBER)
+;; e.g. (f64.const 1093.31) or (i32.const -3029)
 ;;
 ;; Call $log_num with the 32-bit integer 42
 ;;
@@ -13,6 +15,7 @@
 
   (func $main
     ;; TODO: call $log_num here
+    (call $log_num (i32.const 31))
   )
 
   (start $main)
