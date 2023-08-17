@@ -39,7 +39,7 @@ Feel free to help out by filing issues and creating PRs!
 
 ## Usage
 
-This project uses **[Node]** & **[NPM]** for compilation and testing.
+This project uses **[Node 16+]** & **[NPM]** for compilation and testing.
 
 <br>
 
