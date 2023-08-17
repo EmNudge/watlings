@@ -27,7 +27,9 @@ by fixing a bunch of small programs!
 <br>
 <br>
 
-## 🚧 Caution
+> [!WARNING]
+> This project is incomplete and in active development.  
+> Feel free to help out by filing issues and creating PRs!
 
 This project is incomplete and in active development.  
 Feel free to help out by filing issues and creating PRs!
