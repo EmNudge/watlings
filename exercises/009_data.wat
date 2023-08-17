@@ -1,13 +1,13 @@
-;;
-;; We can inline data by using utf-8 strings and the `data` instruction:
-;;  (data (i32.const OFFSET) "TEXT DATA")
-;;
-;; This can be regular string data or binary blobs (via escape sequences)
-;;
-;; Inlining data requires memory, which we can request using `(memory NUMBER)`
-;;
-;; Export a function called $log_data that logs any 3 different strings.
-;;
+(;
+  We can inline data by using utf-8 strings and the `data` instruction:
+    (data (i32.const OFFSET) "TEXT DATA")
+
+  This can be regular string data or binary blobs (via escape sequences)
+
+  Inlining data requires memory, which we can request using `(memory NUMBER)`
+
+  Export a function called $log_data that logs any 3 different strings.
+;)
 
 (module
   ;; function that logs strings using start index and length

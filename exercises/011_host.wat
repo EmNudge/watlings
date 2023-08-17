@@ -1,10 +1,10 @@
-;;
-;; This exercise just exists to get better at interop between the host environment and wasm.
-;;
-;; There is nothing you must edit here, but feel free to play around!
-;;
-;; You will find more detailed comments in the associated JS file.
-;;
+(;
+  This exercise just exists to get better at interop between the host environment and wasm.
+
+  There is nothing you must edit here, but feel free to play around!
+
+  You will find more detailed comments in the associated JS file.
+;)
 
 (module
   (import "env" "memory" (memory 1))

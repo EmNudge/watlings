@@ -1,24 +1,24 @@
-;;
-;; Loops can be created using labels and branching.
-;;
-;; Here is a quick infinite-loop (do not recreate):
-;;  (loop $loop_name
-;;    (br $loop_name) ;; jump to $loop_name label
-;;  )
-;;
-;; Labels can be created using (loop $name ...) and (block $name ...)
-;; The only difference is that a `loop` block places the label BEFORE the enclosed code,
-;; whereas `block` places the label AFTER the code block.
-;;
-;;  (block $block_name
-;;    (br $block_name)
-;;    (call $some_function) ;; this is never called
-;;  )
-;;
-;; You can conditionally branch by placing a `br` inside an (if ...) or by using br_if
-;;
-;; Implement $count_even_until according to the comment.
-;;
+(;
+  Loops can be created using labels and branching.
+
+  Here is a quick infinite-loop (do not recreate):
+    (loop $loop_name
+      (br $loop_name) ;; jump to $loop_name label
+    )
+
+  Labels can be created using (loop $name ...) and (block $name ...)
+  The only difference is that a `loop` block places the label BEFORE the enclosed code,
+  whereas `block` places the label AFTER the code block.
+
+    (block $block_name
+      (br $block_name)
+      (call $some_function) ;; this is never called
+    )
+
+  You can conditionally branch by placing a `br` inside an (if ...) or by using br_if
+
+  Implement $count_even_until according to the comment.
+;)
 
 (module
   (import "env" "log" (func $log_num (param i32)))

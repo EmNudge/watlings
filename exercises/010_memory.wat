@@ -1,14 +1,14 @@
-;;
-;; How do we return arrays? How do we quickly generate data?
-;; Instead of just returning a number, what about sharing some block of memory?
-;; The host can write some input, call us, and then read the result.
-;;
-;; While we only have 32 and 64 bit numbers, we often deal in "bytes"
-;; We store and retrieve bytes from our global memory block by using 
-;;  (i32.store8 (INDEX) (VALUE)) and (i32.load8_u (INDEX))
-;;
-;; Implement $double_data which doubles every integer in the memory range provided
-;;
+(;
+  How do we return arrays? How do we quickly generate data?
+  Instead of just returning a number, what about sharing some block of memory?
+  The host can write some input, call us, and then read the result.
+
+  While we only have 32 and 64 bit numbers, we often deal in "bytes"
+  We store and retrieve bytes from our global memory block by using 
+    (i32.store8 (INDEX) (VALUE)) and (i32.load8_u (INDEX))
+
+  Implement $double_data which doubles every integer in the memory range provided
+;)
 
 (module
   ;; Get from host via import instead of exporting our own

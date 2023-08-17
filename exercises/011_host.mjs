@@ -1,12 +1,12 @@
-/**
- * We'll need to start talking more about the host environment.
- *
- * wat/wast files cannot be directly executed. We're using a parser (wat2wasm) to get the WASM.
- * Then we read the file into memory as a Buffer and pass it to WebAssembly.instantiate()
- *
- * There is nothing
- *
- */
+/*
+  We'll need to start talking more about the host environment.
+
+  wat/wast files cannot be directly executed. We're using a parser (wat2wasm) to get the WASM.
+  Then we read the file into memory as a Buffer and pass it to WebAssembly.instantiate()
+
+  There is nothing you must fix here, but feel free to play around.
+*/
+
 import fs from "fs/promises";
 import { getWastParser } from "../utils/getWastParser.mjs";
 

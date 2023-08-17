@@ -88,7 +88,10 @@ async function main() {
     try {
       const jsFilePath = new URL('./exercises/' + file.replace(/\.[^.]+$/, '.mjs'), import.meta.url);
       await fs.access(jsFilePath);
-      console.log(`${file} has associated JS file`);
+      
+      console.log(`Running associates JS file for ${file}`);
+      await import(jsFilePath);
+      console.log('_'.repeat(32) + '\n');
       return;
     } catch {}
     

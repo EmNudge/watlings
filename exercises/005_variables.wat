@@ -1,15 +1,15 @@
-;;
-;; Variables must be declared before use. They can either be global or local.
-;; 
-;; Syntax:
-;;  (global/local $var_name TYPE init_expr)
-;;  (global/local.get $var_name)
-;;  (global/local.set $var_name (VALUE))
-;;
-;; Global variables must be marked as (mut TYPE) if we want them to be editable
-;;
-;; Finish the doubleGlobal function
-;;
+(;
+  Variables must be declared before use. They can either be global or local.
+
+  Syntax:
+    (global/local $var_name TYPE init_expr)
+    (global/local.get $var_name)
+    (global/local.set $var_name (VALUE))
+
+  Global variables must be marked as (mut TYPE) if we want them to be editable.
+
+  Finish the doubleGlobal function.
+;)
 
 (module
   (import "env" "global_num" (global $global_num_import (mut i32)))

@@ -1,19 +1,19 @@
-;;
-;; Functions can define parameters and return types.
-;;
-;; A return type is defined with a `(result TYPE)` expression, such as:
-;;  (func $get_num (result i32) (i32.const 42))
-;;
-;; Parameters are defined with `(param TYPE)` or `(param $param_name TYPE)`
-;;  (func $log_wasm (param i32) (call $log_num (local.get 0)))
-;;  (func $log_wasm (param $a i32) (call $log_num (local.get $a)))
-;;
-;; A parameter can be retrieved with (local.get $param_name)
-;; If the parameter was not given a name, it can be 0-indexed
-;; i.e. (local.get 0) is the 1st param
-;;
-;; Implement the $sub and $mul functions using i32.sub and i32.mul
-;;
+(;
+  Functions can define parameters and return types.
+
+  A return type is defined with a `(result TYPE)` expression, such as:
+    (func $get_num (result i32) (i32.const 42))
+
+  Parameters are defined with `(param TYPE)` or `(param $param_name TYPE)`
+    (func $log_wasm (param i32) (call $log_num (local.get 0)))
+    (func $log_wasm (param $a i32) (call $log_num (local.get $a)))
+
+  A parameter can be retrieved with (local.get $param_name)
+  If the parameter was not given a name, it can be 0-indexed
+  i.e. (local.get 0) is the 1st param
+
+  Implement the $sub and $mul functions using i32.sub and i32.mul
+;)
 
 (module
   ;; A function that returns the number 42
