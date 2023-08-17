@@ -20,7 +20,7 @@
   (data (i32.const 20) "Woah, radical!\n") ;; inline 15 bytes at offset 20
 
   ;; TODO: export a function $log_data that logs 3 different strings
-  ;; It shoukd make calls to $log_string
+  ;; It should make calls to $log_string
 
   (export "logData" (func $log_data))
   (export "mem" (memory 0))

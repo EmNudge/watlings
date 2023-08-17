@@ -3,7 +3,7 @@
 ;; Choosing a type has ergonomic consequences. It is very difficult to change later down the line.
 ;; The memory layout and maximum value of a f32 is very different from an i32.
 ;;
-;; We cannot use an i32.add on an f32 without first converting it. There is no implicit convesion.
+;; We cannot use an i32.add on an f32 without first converting it. There is no implicit conversion.
 ;;
 ;; When converting, we must also be aware of whether our ints are signed. An op will end with `_s` or `_u` if it is sign-aware.
 ;;  i32.trunc_f32_s -> f32 to i32 (signed)
