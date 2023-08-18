@@ -24,3 +24,14 @@ test("doesn't call log until manually invoked", async () => {
 
   expect(called).toBe(true);
 });
+
+test("main function still logs 42", async () => {
+  let output;
+  const log = (num) => output = num;
+
+  const { instance } = await WebAssembly.instantiate(wasmBytes, { env: { log } });
+
+  instance.exports.main();
+
+  expect(output).toBe(42);
+});

@@ -15,7 +15,6 @@
 
   (func $main
     ;; TODO: call $log_num here
-    (call $log_num (i32.const 31))
   )
 
   (start $main)
