@@ -62,7 +62,7 @@ If it is found on your path as `wat2wasm`, it will be used instead of **[NPM WAB
 
 ## Recommended Editor
 
-We recommend using **[VSCode]** with the [WATI]() extension.
+We recommend using **[VSCode]** with the **[WATI]** extension.
 
 This should provide syntax highlighting, intellisense, and other helpful features as you work through the exercises.
 
