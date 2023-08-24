@@ -28,9 +28,6 @@
 
   (func $call_func (param $table_index i32) (result i32)
     ;; TODO: Call the function indexed by $table_index in the table
-    (call_indirect $internal_funcs_table (type $custom_func_type) 
-      (local.get $table_index)
-    )
   )
 
   (export "callFunc" (func $call_func))
