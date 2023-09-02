@@ -4,6 +4,7 @@
   "scripts": {
     "start": "bash run.sh",
     "build": "node build.mjs",
+    "solve": "bash solve.sh",
     "test": "vitest --run"
   },
   "devDependencies": {

@@ -50,6 +50,14 @@ npm start 001_hello
 
 <br>
 
+If you'd like to view the solution to an exercise, use the `solve` command:
+
+```sh
+npm run solve 001_hello
+```
+
+<br>
+
 ## Using Wat2Wasm Directly ( Recommended )
 
 For syntax highlighting and up-to-date builds, you can **optionally** use the official **[WebAssembly Binary Toolkit][WABT]** which will provide you with a `wat2wasm` CLI tool.

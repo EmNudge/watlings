@@ -1,0 +1,11 @@
+60,61c60,66
+<     ;; TODO:
+<     ;; return 42 if even, 100 if odd
+---
+>     (select (i32.const 42) (i32.const 100) (call $is_even (local.get $num)))
+>     ;; OR
+>     ;; (if (result i32)
+>     ;;   (call $is_even (local.get $num))
+>     ;;   (then (i32.const 42))
+>     ;;   (else (i32.const 100))
+>     ;; )

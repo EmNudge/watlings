@@ -1,0 +1,22 @@
+44c44,62
+<     ;; double all the values within the index range [$start, $end]
+---
+>     (local $index i32)
+>     (local.set $index (local.get $start))
+> 
+>     (loop $loop_name 
+>       (i32.store8 ;; mem[$index] = mem[$index] * 2
+>         (local.get $index)
+>         (i32.mul ;; mem[$index] * 2
+>           (i32.const 2)
+>           (i32.load8_u (local.get $index))
+>         )
+>       )
+> 
+>       ;; $index = $index + 1 
+>       (local.set $index (i32.add (local.get $index) (i32.const 1)))
+> 
+>       ;; loop if $index < $end
+>       (i32.lt_u (local.get $index) (local.get $end)) 
+>       (br_if $loop_name)
+>     )

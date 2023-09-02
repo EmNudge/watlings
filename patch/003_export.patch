@@ -1,0 +1,5 @@
+22,23c22
+<   ;; TODO: replace this with an export
+<   (start $main)
+---
+>   (export "main" (func $main))

@@ -1,0 +1,5 @@
+29c29,30
+<     ;; TODO: call $send_func_ref and $send_func_ref with correct params
+---
+>     (call $send_func_ref (global.get $global_func_ref))
+>     (call $send_extern_ref (global.get $global_extern_ref))

@@ -1,0 +1,8 @@
+25c25,29
+<     ;; TODO: double the value using double_float
+---
+>     (i32.trunc_f32_s 
+>       (call $double_float 
+>         (f32.convert_i32_s (local.get $num))
+>       )
+>     )
