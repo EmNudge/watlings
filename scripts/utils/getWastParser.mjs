@@ -14,7 +14,7 @@ export async function getWastParser() {
     return async (filePath) => {
       const path = new URL(filePath, import.meta.url).pathname;
       const fileName = path.match(/\/([^\/]+)\.wat$/)[1];
-      const wasmPath = new URL(`../.cache/${fileName}.wasm`, import.meta.url).pathname;
+      const wasmPath = new URL(`../../.cache/${fileName}.wasm`, import.meta.url).pathname;
 
       return new Promise((res, rej) => {
         spawn('wat2wasm', [path, '-o', wasmPath], { stdio:'inherit' })
@@ -33,7 +33,7 @@ export async function getWastParser() {
     return async (filePath) => {
       const path = new URL(filePath).pathname;
       const fileName = path.match(/\/([^\/]+)\.wat$/)[1];
-      const wasmPath = new URL(`../.cache/${fileName}.wasm`, import.meta.url);
+      const wasmPath = new URL(`../../.cache/${fileName}.wasm`, import.meta.url);
 
       const fileBytes = await fs.readFile(path);
 

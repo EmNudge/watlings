@@ -2,9 +2,9 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "start": "bash run.sh",
-    "build": "node build.mjs",
-    "solve": "bash solve.sh",
+    "start": "node scripts/run.mjs",
+    "build": "node scripts/build.mjs",
+    "solve": "node scripts/solve.mjs",
     "test": "vitest --run"
   },
   "devDependencies": {

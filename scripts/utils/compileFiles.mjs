@@ -1,6 +1,6 @@
 import fs from 'node:fs/promises';
 import { webcrypto } from 'node:crypto';
-import { getWastParser } from './utils/getWastParser.mjs'
+import { getWastParser } from './getWastParser.mjs'
 
 /**
  * Get SHA-1 hash of file - used for detecting updates
@@ -26,7 +26,7 @@ const getSha1Hash = async (buffer) => {
  * @returns {Promise<string[]>}
  */
 async function getChangedFiles(files) {
-  const cachePath = new URL('./.cache/cache.txt', import.meta.url);
+  const cachePath = new URL('../../.cache/cache.txt', import.meta.url);
   let contents = new Map();
 
   try {
@@ -42,7 +42,7 @@ async function getChangedFiles(files) {
   } catch {}
 
   const filePromises = files.map(async name => {
-    const path = new URL(`./exercises/${name}`, import.meta.url);
+    const path = new URL(`../../exercises/${name}`, import.meta.url);
     const bytes = await fs.readFile(path);
 
     return [name, await getSha1Hash(bytes)];
@@ -57,11 +57,11 @@ async function getChangedFiles(files) {
   return changedFiled;
 }
 
-async function getFileNames() {
+/** @param {string | undefined} fileNameFilter */
+async function getFileNames(fileNameFilter) {
   const fileNames = await fs.readdir('exercises');
   const changedFiles = await getChangedFiles(fileNames);
 
-  const fileNameFilter = process.argv[2];
   const regex = new RegExp(fileNameFilter ?? '', 'i');
   
   return changedFiles.filter(fileName => {
@@ -70,8 +70,9 @@ async function getFileNames() {
   });
 }
 
-async function main() {
-  const fileNames = await getFileNames();
+/** @param {string | undefined} fileNameFilter */
+export async function compileFiles(fileNameFilter = process.argv[2]) {
+  const fileNames = await getFileNames(fileNameFilter);
   
   if (!fileNames.length) {
     console.log('no changes detected.');
@@ -80,13 +81,13 @@ async function main() {
 
   const parseWast = await getWastParser();
 
-  const cachePath = new URL('./.cache/cache.txt', import.meta.url);
+  const cachePath = new URL('../../.cache/cache.txt', import.meta.url);
   const cacheFileHandle = await fs.open(cachePath, 'a')
 
   let successCount = 0;
   await Promise.all(fileNames.map(async file => {
     try {
-      const jsFilePath = new URL('./exercises/' + file.replace(/\.[^.]+$/, '.mjs'), import.meta.url);
+      const jsFilePath = new URL('../../exercises/' + file.replace(/\.[^.]+$/, '.mjs'), import.meta.url);
       await fs.access(jsFilePath);
       
       console.log(`Running associates JS file for ${file}`);
@@ -95,7 +96,7 @@ async function main() {
       return;
     } catch {}
     
-    const filePath = new URL('./exercises/' + file, import.meta.url);
+    const filePath = new URL('../../exercises/' + file, import.meta.url);
     
     try {
       await parseWast(filePath.pathname);
@@ -115,5 +116,3 @@ async function main() {
 
   console.log(`compiled ${successCount} files`);
 }
-
-main();

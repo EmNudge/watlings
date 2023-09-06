@@ -1,12 +1,4 @@
---- exercises/001_hello.wat	2023-08-17 21:09:27
-+++ exercises/001_hello_solved.wat	2023-09-01 17:59:58
-@@ -14,7 +14,7 @@
-   (import "env" "log" (func $log_num (param i32)))
- 
-   (func $main
--    ;; TODO: call $log_num here
-+    (call $log_num (i32.const 42))
-   )
- 
-   (start $main)
-\ No newline at end of file
+17c17
+<     ;; TODO: call $log_num here
+---
+>     (call $log_num (i32.const 42))
