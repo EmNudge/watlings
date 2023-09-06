@@ -40,7 +40,7 @@ export function patch(patchString, targetString) {
     }
 
     const [start, end] = srcRange.split(',').map(Number);
-    const length = end ? end - start : 1;
+    const length = end ? end - (start - 1) : 1;
     const lines = addLines?.trim().split('\n').map(line => line.slice(2)) ?? [];
 
     targetArr.splice(start - 1, length, ...lines);
