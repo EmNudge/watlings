@@ -26,8 +26,13 @@ const patchFile = await readFile(patchFilePath, 'utf-8').catch(() => {
 const sourceFilePath = new URL(`../exercises/${nameBase}.wat`, import.meta.url);
 const sourceFile = await readFile(sourceFilePath, 'utf-8');
 
-const patchedContent = patch(patchFile, sourceFile);
-
-await writeFile(sourceFilePath, patchedContent)
-
-console.log(`Patch applied successfully to: ${nameBase}`);
+try {
+  const patchedContent = patch(patchFile, sourceFile);
+  
+  await writeFile(sourceFilePath, patchedContent)
+  
+  console.log(`Patch applied successfully to: ${nameBase}`);
+} catch (e) {
+  console.error(`Error applying patch: ${e.message}`);
+  console.info('\nYou may want to stash your changes to the file before trying again,')
+}

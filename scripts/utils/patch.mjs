@@ -19,11 +19,11 @@
 // An attempt at a "readable" RegEx. This does not verify, only parse (possible false-positives).
 const PATCH_REGEX_SOURCE = [
   /(?<srcRange>[0-9]+(?:,[0-9]+)?)/,  // RANGE
-  /(?c|a|d)/,
-  /(?[0-9]+(?:,[0-9]+)?)/,            // RANGE
-  /(?:\n(?:<[^\n]+\n)+)?/,            // DEL_BODY
+  /(c|a|d)/,
+  /([0-9]+(?:,[0-9]+)?)/,            // RANGE
+  /(?<delLines>\n(?:<[^\n]+\n)+)?/,  // DEL_BODY
   /(?:---)?/,
-  /(?<addLines>(?:\n>[^\n]+)+)?/,     // ADD_BODY
+  /(?<addLines>(?:\n>[^\n]+)+)?/,    // ADD_BODY
 ].map(regex => regex.source).join('');
 const PATCH_REGEX = new RegExp(PATCH_REGEX_SOURCE, 'g');
 
@@ -32,8 +32,12 @@ export function patch(patchString, targetString) {
   const targetArr = targetString.split('\n');
 
   for (const match of patchString.matchAll(PATCH_REGEX)) {
-    /** @type {{ [key: string]: string | undefined }} */
-    const { srcRange, addLines } = match.groups;
+    /** @type {{ srcRange: string, addLines?: string, delLines?: string }} */
+    const { srcRange, addLines, delLines } = match.groups;
+
+    if (delLines && !targetString.includes(delLines.replace(/< /g, ''))) {
+      throw new Error('Patch contains deletion that does not exist in target');
+    }
 
     const [start, end] = srcRange.split(',').map(Number);
     const length = end ? end - start : 1;
