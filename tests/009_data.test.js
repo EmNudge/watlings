@@ -22,7 +22,7 @@ test("logData logs 3 strings", async () => {
       log_string: (start, length) => {
         const dataView = new Uint8Array(mem.buffer);
         const byteSlice = dataView.slice(start, start + length);
-        loggedStrings.push(new TextDecoder().decode(byteSlice, "utf-8"));
+        loggedStrings.push(new TextDecoder().decode(byteSlice));
       },
     },
   });
@@ -39,7 +39,7 @@ test("logData logs 3 different string(s)", async () => {
       log_string: (start, length) => {
         const dataView = new Uint8Array(mem.buffer);
         const byteSlice = dataView.slice(start, start + length);
-        loggedStrings.push(new TextDecoder().decode(byteSlice, "utf-8"));
+        loggedStrings.push(new TextDecoder().decode(byteSlice));
       },
     },
   });
