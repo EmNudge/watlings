@@ -1,24 +1,33 @@
-import { readdir } from 'fs/promises';
+import { readdir, readFile, writeFile } from 'fs/promises';
 import { basename, extname, } from 'path';
-import { execSync } from 'child_process';
+import { patch } from './utils/patch.mjs';
 
 // Strip path and extension from argument
-const src = process.argv[2];
-const strippedFile = basename(src, extname(src));
+const targetFileName = basename(process.argv[2], extname(process.argv[2]));
 
-// Search the exercises folder for the first matching file
 const folderFiles = await readdir(new URL('../exercises', import.meta.url));
-const targetFile = folderFiles.find(fileName => fileName.includes(strippedFile));
+const sourceFileNameWithExt = folderFiles.find(fileName => {
+  return fileName.includes(targetFileName) && fileName.endsWith('.wat');
+});
 
-if (!targetFile) {
-  console.log(`No file matching ${strippedFile} found in the exercises folder.`);
+if (!sourceFileNameWithExt) {
+  console.log(`No file matching ${targetFileName} found in the exercises folder.`);
   process.exit(1);
 }
 
-// Strip path and extension from target
-const strippedTarget = basename(targetFile, extname(targetFile));
+const nameBase = basename(sourceFileNameWithExt, '.wat');
 
-// Apply the patch
-execSync(`patch "exercises/${targetFile}" < "patch/${strippedTarget}.patch"`);
+const patchFilePath = new URL(`../patch/${nameBase}.patch`, import.meta.url);
+const patchFile = await readFile(patchFilePath, 'utf-8').catch(() => {
+  console.error(`No patch file found under patch/${nameBase}.patch`);
+  process.exit(1);
+});
 
-console.log(`Patch applied successfully to: ${targetFile}`);
+const sourceFilePath = new URL(`../exercises/${nameBase}.wat`, import.meta.url);
+const sourceFile = await readFile(sourceFilePath, 'utf-8');
+
+const patchedContent = patch(patchFile, sourceFile);
+
+await writeFile(sourceFilePath, patchedContent)
+
+console.log(`Patch applied successfully to: ${nameBase}`);
