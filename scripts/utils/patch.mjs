@@ -1,11 +1,29 @@
-// An attempt at a "readable" regex
+/**
+ * We're reimplementing `patch` for use on Windows. 
+ * This may not be "spec compliant", but it should suffice for our use cases.
+ * 
+ * Here's an unofficial syntax description:
+ * 
+ * RANGE = num+ | num+ ',' num+
+ * ACTION_CHAR = 'a' | 'c' | 'd'
+ * ACTION_HEADER<T = ACTION_CHAR> = RANGE <T> RANGE
+ * DEL_BODY = ( '<' text+ )+
+ * ADD_BODY = ( '>' text+ )+
+ * ACTION<T = ACTION_CHAR> = 
+ *  ACTION_HEADER<'c'> DEL_BODY '---' ADD_BODY 
+ *  | ACTION_HEADER<'d'> DEL_BODY 
+ *  | ACTION_HEADER<'a'> ADD_BODY
+ * FILE = ACTION<T>+
+ */
+
+// An attempt at a "readable" RegEx. This does not verify, only parse (possible false-positives).
 const PATCH_REGEX_SOURCE = [
-  /(?<srcRangeStart>[0-9]+)(?:,(?<srcRangeEnd>[0-9]+))?/, // range
-  /c/,
-  /[0-9]+(?:,[0-9]+)?/, // range
-  /\n(?:<[^\n]+\n)+/,    // lines to delete (preceded by <)
-  /---/,
-  /(?<addLines>(?:\n>[^\n]+)+)/,      // lines to add (preceded by >)
+  /(?<srcRange>[0-9]+(?:,[0-9]+)?)/,  // RANGE
+  /(?c|a|d)/,
+  /(?[0-9]+(?:,[0-9]+)?)/,            // RANGE
+  /(?:\n(?:<[^\n]+\n)+)?/,            // DEL_BODY
+  /(?:---)?/,
+  /(?<addLines>(?:\n>[^\n]+)+)?/,     // ADD_BODY
 ].map(regex => regex.source).join('');
 const PATCH_REGEX = new RegExp(PATCH_REGEX_SOURCE, 'g');
 
@@ -14,13 +32,14 @@ export function patch(patchString, targetString) {
   const targetArr = targetString.split('\n');
 
   for (const match of patchString.matchAll(PATCH_REGEX)) {
-    const { srcRangeStart, srcRangeEnd, addLines } = match.groups;
-    
-    const start = Number(srcRangeStart) - 1;
-    const length = srcRangeEnd ? Number(srcRangeEnd) - start : 1;
-    const lines = addLines.trim().split('\n').map(line => line.slice(1))
+    /** @type {{ [key: string]: string | undefined }} */
+    const { srcRange, addLines } = match.groups;
 
-    targetArr.splice(start, length, ...lines);
+    const [start, end] = srcRange.split(',').map(Number);
+    const length = end ? end - start : 1;
+    const lines = addLines?.trim().split('\n').map(line => line.slice(2)) ?? [];
+
+    targetArr.splice(start - 1, length, ...lines);
   }
 
   return targetArr.join('\n');
