@@ -8,7 +8,7 @@
 */
 
 import fs from "fs/promises";
-import { getWastParser } from "../utils/getWastParser.mjs";
+import { getWastParser } from "../scripts/utils/getWastParser.mjs";
 
 // parse WAT file to WASM and read it as Buffer
 const wasmBytes = await getWastParser()
