@@ -7,8 +7,8 @@
     )
 
   Labels can be created using (loop $name ...) and (block $name ...)
-  The only difference is that a `loop` block places the label BEFORE the enclosed code,
-  whereas `block` places the label AFTER the code block.
+  The only difference is that a branch to `loop` label goes back to the entry again,
+  whereas a branch to `block` label goes forward to the exit.
 
     (block $block_name
       (br $block_name)
