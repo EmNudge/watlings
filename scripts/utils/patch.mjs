@@ -29,6 +29,12 @@ const PATCH_REGEX = new RegExp(PATCH_REGEX_SOURCE, 'g');
 
 /** @param {string} patchString @param {string} targetString */
 export function patch(patchString, targetString) {
+  // Fix Windows inserting carriage returns
+  if (process.arch === 'win32') {
+    targetString = targetString.replace(/\r/g, '');
+    patchString = patchString.replace(/\r/g, '');
+  }
+
   const targetArr = targetString.split('\n');
 
   for (const match of patchString.matchAll(PATCH_REGEX)) {

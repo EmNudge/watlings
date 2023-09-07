@@ -99,7 +99,8 @@ export async function compileFiles(fileNameFilter = process.argv[2]) {
     const filePath = new URL('../../exercises/' + file, import.meta.url);
     
     try {
-      await parseWast(filePath.pathname);
+      const path = process.arch === 'win32' ? filePath.pathname.slice(1) : filePath.pathname;
+      await parseWast(path);
 
       // add WAT hash
       const fileBytes = await fs.readFile(filePath);
