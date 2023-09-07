@@ -38,7 +38,6 @@ export function patch(patchString, targetString) {
   const targetArr = targetString.split('\n');
 
   for (const match of patchString.matchAll(PATCH_REGEX)) {
-    /** @type {{ srcRange: string, addLines?: string, delLines?: string }} */
     const { srcRange, addLines, delLines } = match.groups;
 
     if (delLines && !targetString.includes(delLines.replace(/< /g, ''))) {

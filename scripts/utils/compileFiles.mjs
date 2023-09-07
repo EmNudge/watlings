@@ -1,5 +1,6 @@
 import fs from 'node:fs/promises';
 import { webcrypto } from 'node:crypto';
+import { fileURLToPath } from 'node:url';
 import { getWastParser } from './getWastParser.mjs'
 
 /**
@@ -26,7 +27,8 @@ const getSha1Hash = async (buffer) => {
  * @returns {Promise<string[]>}
  */
 async function getChangedFiles(files) {
-  const cachePath = new URL('../../.cache/cache.txt', import.meta.url);
+  const cachePath = fileURLToPath(new URL('../../.cache/cache.txt', import.meta.url));
+  /** @type {Map<string, string>} */
   let contents = new Map();
 
   try {
@@ -38,11 +40,15 @@ async function getChangedFiles(files) {
   try {
     const bytes = await fs.readFile(cachePath);
     const fileText = new TextDecoder('utf-8').decode(bytes);
-    contents = new Map(fileText.split('\n').map(line => line.split(':')))
+    contents = new Map(
+      fileText
+        .split('\n')
+        .map(line => /** @type {[string, string]} */(line.split(':')))
+    )
   } catch {}
 
   const filePromises = files.map(async name => {
-    const path = new URL(`../../exercises/${name}`, import.meta.url);
+    const path = fileURLToPath(new URL(`../../exercises/${name}`, import.meta.url));
     const bytes = await fs.readFile(path);
 
     return [name, await getSha1Hash(bytes)];
@@ -81,26 +87,25 @@ export async function compileFiles(fileNameFilter = process.argv[2]) {
 
   const parseWast = await getWastParser();
 
-  const cachePath = new URL('../../.cache/cache.txt', import.meta.url);
+  const cachePath = fileURLToPath(new URL('../../.cache/cache.txt', import.meta.url));
   const cacheFileHandle = await fs.open(cachePath, 'a')
 
   let successCount = 0;
   await Promise.all(fileNames.map(async file => {
     try {
-      const jsFilePath = new URL('../../exercises/' + file.replace(/\.[^.]+$/, '.mjs'), import.meta.url);
+      const jsFilePath = fileURLToPath(new URL('../../exercises/' + file.replace(/\.[^.]+$/, '.mjs'), import.meta.url));
       await fs.access(jsFilePath);
       
-      console.log(`Running associates JS file for ${file}`);
+      console.log(`Running associated JS file for ${file}`);
       await import(jsFilePath);
       console.log('_'.repeat(32) + '\n');
       return;
     } catch {}
     
-    const filePath = new URL('../../exercises/' + file, import.meta.url);
+    const filePath = fileURLToPath(new URL('../../exercises/' + file, import.meta.url));
     
     try {
-      const path = process.platform === 'win32' ? filePath.pathname.slice(1) : filePath.pathname;
-      await parseWast(path);
+      await parseWast(filePath);
 
       // add WAT hash
       const fileBytes = await fs.readFile(filePath);

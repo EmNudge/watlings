@@ -1,8 +1,10 @@
 import Wabt from 'wabt';
 import fs from 'node:fs/promises';
 import { spawn } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
+import { basename } from 'path';
 
-/** @typedef {Promise<(filePath: string | URL) => Promise<undefined>>} WastParser */
+/** @typedef {Promise<(filePath: string) => Promise<undefined>>} WastParser */
 
 /** @param {string} command  @param {readonly string[]} args */
 const spawnPromise = (command, args) => {
@@ -25,11 +27,10 @@ const spawnPromise = (command, args) => {
 /** @returns {WastParser} */
 async function getWat2WasmParser() {
   return async (filePath) => {
-    const path = new URL(filePath, import.meta.url).pathname;
-    const fileName = path.match(/\/([^\/]+)\.wat$/)[1];
-    const wasmPath = new URL(`../../.cache/${fileName}.wasm`, import.meta.url).pathname;
+    const fileName = basename(filePath, '.wat');
+    const wasmPath = fileURLToPath(new URL(`../../.cache/${fileName}.wasm`, import.meta.url));
 
-    await spawnPromise('wat2wasm', [path, '-o', wasmPath]);
+    await spawnPromise('wat2wasm', [filePath, '-o', wasmPath]);
   }
 }
 
@@ -38,11 +39,10 @@ async function getWabtParser() {
   const wabt = await Wabt();
 
   return async (filePath) => {
-    const path = new URL(filePath, import.meta.url).pathname;
-    const fileName = path.match(/\/([^\/]+)\.wat$/)[1];
-    const wasmPath = new URL(`../../.cache/${fileName}.wasm`, import.meta.url);
+    const fileName = basename(filePath, '.wat');
+    const wasmPath = fileURLToPath(new URL(`../../.cache/${fileName}.wasm`, import.meta.url));
 
-    const fileBytes = await fs.readFile(path);
+    const fileBytes = await fs.readFile(filePath);
 
     const wasmFile = wabt.parseWat('inline', fileBytes, {
       mutable_globals: true,
