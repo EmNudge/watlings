@@ -26,7 +26,7 @@
   (global $global_func_ref funcref (ref.func $send_func_ref))
 
   (func $main
-    ;; TODO: call $send_func_ref and $send_func_ref with correct params
+    ;; TODO: call $send_func_ref and $send_extern_ref with correct params
   )
 
   (export "main" (func $main))
