@@ -30,7 +30,7 @@ const PATCH_REGEX = new RegExp(PATCH_REGEX_SOURCE, 'g');
 /** @param {string} patchString @param {string} targetString */
 export function patch(patchString, targetString) {
   // Fix Windows inserting carriage returns
-  if (process.arch === 'win32') {
+  if (process.platform === 'win32') {
     targetString = targetString.replace(/\r/g, '');
     patchString = patchString.replace(/\r/g, '');
   }
