@@ -1,4 +1,4 @@
-29c29
+26c26
 <     ;; TODO: call $log_nums here
 ---
 >     (call $log_nums (i32.const 1) (i32.const 2) (i32.const 3))

@@ -39,8 +39,7 @@ export function patch(patchString, targetString) {
 
   for (const match of patchString.matchAll(PATCH_REGEX)) {
     const { srcRange, addLines, delLines } = match.groups;
-
-    if (delLines && !targetString.includes(delLines.replace(/< /g, ''))) {
+    if (delLines && !targetString.includes(delLines.slice(1).replace(/< /g, ''))) {
       throw new Error('Patch contains deletion that does not exist in target');
     }
 
