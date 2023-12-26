@@ -6,9 +6,9 @@
       (br $loop_name) ;; jump to $loop_name label
     )
 
-  Labels can be created using (loop $name ...) and (block $name ...)
-  The only difference is that a `loop` block places the label BEFORE the enclosed code,
-  whereas `block` places the label AFTER the code block.
+  Both `loop` and `block` create jump points (labels) which we can branch to at some point.
+  A `loop` creates a label at the start, so a jump will go back to the entry.
+  A `block` creates a label at the end, so a jump will go forward to the exit.
 
     (block $block_name
       (br $block_name)
