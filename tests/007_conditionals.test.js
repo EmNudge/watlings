@@ -1,30 +1,37 @@
-import { expect, test } from "vitest";
-import fs from "fs/promises";
+import { instantiate } from "./utils/instantiate.mjs";
+import {
+  assert,
+  matchObjectShape,
+  setSuccess,
+  test,
+} from "./utils/test-runner.mjs";
+import { getWasm } from './utils/getWasm.mjs';
 
-const { 1: baseName } = import.meta.url.match(/\/([^\/.]+)[^\/]+$/);
-const wasmBytes = await fs.readFile(`./.cache/${baseName}.wasm`);
+const wasmBytes = await getWasm(import.meta.url);
+
+setSuccess("Congrats! Continue onto 008_loops.wat");
 
 test("exports isEven and getNum", async () => {
-  const { instance } = await WebAssembly.instantiate(wasmBytes);
-
-  expect(instance.exports).toMatchObject({
-    isEven: expect.any(Function),
-    getNum: expect.any(Function),
-  });
+const exports = await instantiate(wasmBytes)
+  assert(
+    matchObjectShape(exports, {
+      isEven: Function,
+      getNum: Function,
+    }),
+    "does not export all of: isEven and getNum"
+  );
 });
 
 test("isEven works", async () => {
-  const { instance } = await WebAssembly.instantiate(wasmBytes);
-
-  const { isEven } = instance.exports;
-  expect(isEven(42)).toBe(1);
-  expect(isEven(43)).toBe(0);
+const exports = await instantiate(wasmBytes)
+  const { isEven } = exports;
+  assert(isEven(42) === 1, "isEven is not returning 1");;
+  assert(isEven(43) === 0, "isEven is not returning 0");;
 });
 
 test("getNum works", async () => {
-  const { instance } = await WebAssembly.instantiate(wasmBytes);
-
-  const { getNum } = instance.exports;
-  expect(getNum(42)).toBe(42);
-  expect(getNum(43)).toBe(100);
+const exports = await instantiate(wasmBytes)
+  const { getNum } = exports;
+  assert(getNum(42) === 42, "getNum is not returning 42");;;
+  assert(getNum(43) === 100, "getNum is not returning 100");;;;
 });

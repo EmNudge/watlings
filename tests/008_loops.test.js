@@ -1,47 +1,67 @@
-import { expect, test } from "vitest";
-import fs from "fs/promises";
+import { instantiate } from "./utils/instantiate.mjs";
+import {
+  assert,
+  matchObjectShape,
+  arrayEquals,
+  test,
+  setSuccess,
+} from "./utils/test-runner.mjs";
+import { getWasm } from "./utils/getWasm.mjs";
 
-const { 1: baseName } = import.meta.url.match(/\/([^\/.]+)[^\/]+$/);
-const wasmBytes = await fs.readFile(`./.cache/${baseName}.wasm`);
+const wasmBytes = await getWasm(import.meta.url);
+
+setSuccess("Congrats! Continue onto 009_data.wat");
 
 test("exports countDown, countUntil, and countEvenUntil", async () => {
-  const { instance } = await WebAssembly.instantiate(wasmBytes, {
+  const exports = await instantiate(wasmBytes, {
     env: { log: () => void 0 },
   });
 
-  expect(instance.exports).toMatchObject({
-    countDown: expect.any(Function),
-    countUntil: expect.any(Function),
-    countEvenUntil: expect.any(Function),
-  });
+  assert(
+    matchObjectShape(exports, {
+      countDown: Function,
+      countUntil: Function,
+      countEvenUntil: Function,
+    }),
+    "does not export all of: countDown, countUntil, and countEvenUntil"
+  );
 });
 
 test("countDown counts down", async () => {
   const logOutput = [];
-  const { instance } = await WebAssembly.instantiate(wasmBytes, {
+  const exports = await instantiate(wasmBytes, {
     env: { log: (num) => logOutput.push(num) },
   });
-  const { countDown } = instance.exports;
+  const { countDown } = exports;
   countDown(10);
-  expect(logOutput).toEqual([9, 8, 7, 6, 5, 4, 3, 2, 1, 0])
+  assert(
+    arrayEquals(logOutput, [9, 8, 7, 6, 5, 4, 3, 2, 1, 0]),
+    "We are not counting down with countDown"
+  );
 });
 
 test("countUntil counts until a number", async () => {
   const logOutput = [];
-  const { instance } = await WebAssembly.instantiate(wasmBytes, {
+  const exports = await instantiate(wasmBytes, {
     env: { log: (num) => logOutput.push(num) },
   });
-  const { countUntil } = instance.exports;
+  const { countUntil } = exports;
   countUntil(10);
-  expect(logOutput).toEqual([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
+  assert(
+    arrayEquals(logOutput, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]),
+    "We are not counting up until 10 with countUntil"
+  );
 });
 
 test("countEvenUntil counts all even digits until a number", async () => {
   const logOutput = [];
-  const { instance } = await WebAssembly.instantiate(wasmBytes, {
+  const exports = await instantiate(wasmBytes, {
     env: { log: (num) => logOutput.push(num) },
   });
-  const { countEvenUntil } = instance.exports;
+  const { countEvenUntil } = exports;
   countEvenUntil(10);
-  expect(logOutput).toEqual([0, 2, 4, 6, 8])
+  assert(
+    arrayEquals(logOutput, [0, 2, 4, 6, 8]),
+    "We are not counting up until 10 with countEvenUntil"
+  );
 });

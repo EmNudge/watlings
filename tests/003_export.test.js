@@ -1,37 +1,53 @@
-import { expect, test } from "vitest";
-import fs from "fs/promises";
+import {
+  assert,
+  matchObjectShape,
+  setSuccess,
+  test,
+} from "./utils/test-runner.mjs";
+import { instantiate } from "./utils/instantiate.mjs";
+import { getWasm } from './utils/getWasm.mjs';
 
-const { 1: baseName } = import.meta.url.match(/\/([^\/.]+)[^\/]+$/);
-const wasmBytes = await fs.readFile(`./.cache/${baseName}.wasm`);
+const wasmBytes = await getWasm(import.meta.url);
+
+setSuccess("Congrats! Continue onto 004_function.wat");
 
 test("exports a main function", async () => {
   const log = () => void 0;
 
-  const { instance } = await WebAssembly.instantiate(wasmBytes, { env: { log } });
+  const exports = await instantiate(wasmBytes, {
+    env: { log },
+  });
 
-  expect(instance.exports).toMatchObject({ main: expect.any(Function) });
+  assert(
+    matchObjectShape(exports, { main: Function }),
+    "does not export a main function"
+  );
 });
 
 test("doesn't call log until manually invoked", async () => {
   let called = false;
-  const log = () => called = true;
+  const log = () => (called = true);
 
-  const { instance } = await WebAssembly.instantiate(wasmBytes, { env: { log } });
+  const exports = await instantiate(wasmBytes, {
+    env: { log },
+  });
 
-  expect(called).toBe(false);
+  assert(called == false, "log was called before main was invoked");
 
-  instance.exports.main();
+  exports.main();
 
-  expect(called).toBe(true);
+  assert(called, "log was not called");
 });
 
 test("main function still logs 42", async () => {
   let output;
-  const log = (num) => output = num;
+  const log = (num) => (output = num);
 
-  const { instance } = await WebAssembly.instantiate(wasmBytes, { env: { log } });
+  const exports = await instantiate(wasmBytes, {
+    env: { log },
+  });
 
-  instance.exports.main();
+  exports.main();
 
-  expect(output).toBe(42);
+  assert(output === 42, "output is not 42");
 });

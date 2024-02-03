@@ -2,16 +2,16 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "start": "node scripts/run.mjs",
+    "start": "node scripts/test.mjs",
+    "test": "node scripts/test.mjs",
     "build": "node scripts/build.mjs",
     "solve": "node scripts/solve.mjs",
-    "show": "node scripts/show-solution.mjs",
-    "test": "vitest --run"
-  },
-  "devDependencies": {
-    "vitest": "^0.34.1"
+    "show": "node scripts/show-solution.mjs"
   },
   "dependencies": {
     "wabt": "^1.0.32"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.16"
   }
 }

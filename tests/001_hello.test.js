@@ -1,8 +1,9 @@
-import { expect, test } from "vitest";
-import fs from "fs/promises";
+import { getWasm } from './utils/getWasm.mjs';
+import { assert, test, setSuccess } from './utils/test-runner.mjs';
 
-const { 1: baseName } = import.meta.url.match(/\/([^\/.]+)[^\/]+$/);
-const wasmBytes = await fs.readFile(`./.cache/${baseName}.wasm`);
+const wasmBytes = await getWasm(import.meta.url);
+
+setSuccess("Congrats! Continue onto 002_ordering.wat");
 
 test("calls log function", async () => {
   let called = false;
@@ -10,7 +11,7 @@ test("calls log function", async () => {
   const log = () => (called = true);
   await WebAssembly.instantiate(wasmBytes, { env: { log } });
 
-  expect(called).toBe(true);
+  assert(called, "log was not called");
 });
 
 test("logs 42", async () => {
@@ -19,5 +20,5 @@ test("logs 42", async () => {
   const log = (val) => (num = val);
   await WebAssembly.instantiate(wasmBytes, { env: { log } });
 
-  expect(num).toBe(42);
+  assert(num === 42, "num is not 42");
 });
