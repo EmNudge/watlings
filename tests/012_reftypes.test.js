@@ -1,52 +1,69 @@
-import { expect, test } from "vitest";
+import { instantiate } from "./utils/instantiate.mjs";
+import { assert, matchObjectShape, test } from "./utils/test-runner.mjs";
 import fs from "fs/promises";
 
 const { 1: baseName } = import.meta.url.match(/\/([^\/.]+)[^\/]+$/);
 const wasmBytes = await fs.readFile(`./.cache/${baseName}.wasm`);
 
 test("exports main", async () => {
-  const { instance } = await WebAssembly.instantiate(wasmBytes, {
+  const exports = await instantiate(wasmBytes, {
     env: {
-      globalExternRef: new WebAssembly.Global({ value: 'externref' }, { value: 42 }), 
+      globalExternRef: new WebAssembly.Global(
+        { value: "externref" },
+        { value: 42 }
+      ),
       sendFuncRef: () => void 0,
       sendExternRef: () => void 0,
-    }
+    },
   });
 
-  expect(instance.exports).toMatchObject({
-    main: expect.any(Function),
-  });
+  assert(
+    matchObjectShape(exports, {
+      main: Function,
+    }),
+    "does not export a main function"
+  );
 });
 
 test("calls sendExternRef with an extern ref", async () => {
   let output;
-  const { instance } = await WebAssembly.instantiate(wasmBytes, {
+  const exports = await instantiate(wasmBytes, {
     env: {
-      globalExternRef: new WebAssembly.Global({ value: 'externref' }, { value: 42 }), 
+      globalExternRef: new WebAssembly.Global(
+        { value: "externref" },
+        { value: 42 }
+      ),
       sendExternRef: (value) => void (output = value),
       sendFuncRef: () => void 0,
-    }
+    },
   });
 
-  const { main } = instance.exports; 
+  const { main } = exports;
   main();
-  
-  expect(output).not.toBe(undefined);
+
+  assert(output !== undefined, "output is undefined");
 });
 
 test("calls sendFuncRef with a func ref", async () => {
+  /** @type {any} */
   let output;
-  const { instance } = await WebAssembly.instantiate(wasmBytes, {
+  const exports = await instantiate(wasmBytes, {
     env: {
-      globalExternRef: new WebAssembly.Global({ value: 'externref' }, { value: 42 }), 
+      globalExternRef: new WebAssembly.Global(
+        { value: "externref" },
+        { value: 42 }
+      ),
       sendFuncRef: (value) => void (output = value),
       sendExternRef: () => void 0,
-    }
+    },
   });
 
-  const { main } = instance.exports; 
+  const { main } = exports;
   main();
 
-  expect(output).not.toBe(undefined);
-  expect(output instanceof Function || output === null).toBe(true);
+  assert(output !== undefined, "output is undefined");
+  assert(
+    output instanceof Function || (output === null) === true,
+    "output is not a function or null"
+  );
 });

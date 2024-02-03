@@ -50,7 +50,7 @@ describe("each file has an associated patch", async () => {
 
   for (const [name, { patch }] of patchMap) {
     test(`patch exists for ${name}`, () => {
-      expect(patch).toBeDefined();
+      assert(patch).toBeDefined();
     });
   }
 });
@@ -59,7 +59,7 @@ describe("can apply patch", async () => {
   const patchMap = await getPatchMap();
   for (const [name, { patch, exercise }] of patchMap) {
     test(`patching ${name}`, () => {
-      expect(() => applyPatch(patch, exercise)).not.toThrowError();
+      assert(() => applyPatch(patch, exercise)).not.toThrowError();
     });
   }
 });

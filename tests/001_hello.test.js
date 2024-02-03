@@ -1,4 +1,4 @@
-import { expect, test } from "vitest";
+import { assert, test } from './utils/test-runner.mjs';
 import fs from "fs/promises";
 
 const { 1: baseName } = import.meta.url.match(/\/([^\/.]+)[^\/]+$/);
@@ -10,7 +10,7 @@ test("calls log function", async () => {
   const log = () => (called = true);
   await WebAssembly.instantiate(wasmBytes, { env: { log } });
 
-  expect(called).toBe(true);
+  assert(called, "log was not called");
 });
 
 test("logs 42", async () => {
@@ -19,5 +19,5 @@ test("logs 42", async () => {
   const log = (val) => (num = val);
   await WebAssembly.instantiate(wasmBytes, { env: { log } });
 
-  expect(num).toBe(42);
+  assert(num === 42, "num is not 42");
 });

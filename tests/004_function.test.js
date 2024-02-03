@@ -1,39 +1,46 @@
-import { expect, test } from "vitest";
+import { instantiate } from "./utils/instantiate.mjs";
+import {
+  assert,
+  matchObjectShape,
+  test,
+} from "./utils/test-runner.mjs";
 import fs from "fs/promises";
 
 const { 1: baseName } = import.meta.url.match(/\/([^\/.]+)[^\/]+$/);
 const wasmBytes = await fs.readFile(`./.cache/${baseName}.wasm`);
 
 test("exports add, sub, and mul", async () => {
-  const { instance } = await WebAssembly.instantiate(wasmBytes);
-
-  expect(instance.exports).toMatchObject({
-    add: expect.any(Function),
-    sub: expect.any(Function),
-    mul: expect.any(Function),
-  });
+const exports = await instantiate(wasmBytes)
+  assert(
+    matchObjectShape(exports, {
+      add: Function,
+      sub: Function,
+      mul: Function,
+    }),
+    "does not export all of: add, sub, and mul"
+  );
 });
 
 test("add works", async () => {
-  const { instance } = await WebAssembly.instantiate(wasmBytes);
-  const { add } = instance.exports;
+const exports = await instantiate(wasmBytes)
+const { add } = exports;
 
-  expect(add(1, 2)).toBe(3);
-  expect(add(1201033, 31002)).toBe(1232035);
+  assert(add(1, 2) === 3, "add(1, 2) is not 3");
+  assert(add(1201033, 31002) === 1232035, "add(1201033, 31002) is not 1232035");
 });
 
 test("sub works", async () => {
-  const { instance } = await WebAssembly.instantiate(wasmBytes);
-  const { sub } = instance.exports;
+const exports = await instantiate(wasmBytes)
+const { sub } = exports;
 
-  expect(sub(3, 1)).toBe(2);
-  expect(sub(999, 333)).toBe(666);
+  assert(sub(3, 1) === 2, "sub(3, 1) is not 2");
+  assert(sub(999, 333) === 666, "sub(999, 333) is not 666");
 });
 
 test("mul works", async () => {
-  const { instance } = await WebAssembly.instantiate(wasmBytes);
-  const { mul } = instance.exports;
+const exports = await instantiate(wasmBytes)
+const { mul } = exports;
 
-  expect(mul(3, 2)).toBe(6);
-  expect(mul(1234, 4321)).toBe(5332114);
+  assert(mul(3, 2) === 6, "mul(3, 2) is not 6");
+  assert(mul(1234, 4321) === 5332114, "mul(1234, 4321) is not 5332114");
 });

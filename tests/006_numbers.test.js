@@ -1,26 +1,29 @@
-import { expect, test } from "vitest";
+import { instantiate } from "./utils/instantiate.mjs";
+import { assert, matchObjectShape, test } from "./utils/test-runner.mjs";
 import fs from "fs/promises";
 
 const { 1: baseName } = import.meta.url.match(/\/([^\/.]+)[^\/]+$/);
 const wasmBytes = await fs.readFile(`./.cache/${baseName}.wasm`);
 
 test("exports doubleInt and doubleGlobal", async () => {
-  const { instance } = await WebAssembly.instantiate(wasmBytes);
-
-  expect(instance.exports).toMatchObject({
-    doubleInt: expect.any(Function),
-    doubleFloat: expect.any(Function),
-  });
+  const exports = await instantiate(wasmBytes);
+  assert(
+    matchObjectShape(exports, {
+      doubleInt: Function,
+      doubleFloat: Function,
+    }),
+    "does not export all of: doubleInt and doubleFloat"
+  );
 });
 
 test("doubleInt works", async () => {
-  const { instance } = await WebAssembly.instantiate(wasmBytes);
-  const { doubleInt } = instance.exports;
-  expect(doubleInt(10)).toBe(20);
+  const exports = await instantiate(wasmBytes);
+  const { doubleInt } = exports;
+  assert(doubleInt(10) === 20, "doubleInt is not doubling");
 });
 
 test("doubleFloat works", async () => {
-  const { instance } = await WebAssembly.instantiate(wasmBytes);
-  const { doubleFloat } = instance.exports;
-  expect(doubleFloat(10.5)).toBe(21);
+  const exports = await instantiate(wasmBytes);
+  const { doubleFloat } = exports;
+  assert(doubleFloat(10.5) === 21, "doubleFloat is not doubling");
 });
