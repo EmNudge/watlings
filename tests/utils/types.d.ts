@@ -8,9 +8,3 @@ export type ObjectShape = {
     | { new (descriptor: any): WebAssembly.Memory; prototype: WebAssembly.Memory; }
     | ObjectShape;
 };
-
-declare global {
-  interface WebAssembly {
-    Exports: Record<string, any>;
-  }
-}
