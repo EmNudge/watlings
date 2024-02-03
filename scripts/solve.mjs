@@ -11,7 +11,7 @@ if (!sourceFileNameWithExt) {
   process.exit(1);
 }
 
-const nameBase = basename(sourceFileNameWithExt, '.wat');
+const nameBase = basename(sourceFileNameWithExt, '.patch');
 
 const patchFilePath = fileURLToPath(new URL(`../patch/${nameBase}.patch`, import.meta.url));
 const patchFile = await readFile(patchFilePath, 'utf-8').catch(() => {
