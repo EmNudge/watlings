@@ -14,7 +14,7 @@ export async function findFile(stub, dir) {
     if (dir === "exercises" && !fileName.endsWith(".wat")) return false;
     if (dir === "patch" && !fileName.endsWith(".patch")) return false;
     if (dir === "tests" && !fileName.endsWith(".test.js")) return false;
-    
+
     return fileName.includes(targetFileName);
   });
 
