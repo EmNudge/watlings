@@ -4,10 +4,13 @@ import {
   matchObjectShape,
   arrayEquals,
   test,
+  setSuccess,
 } from "./utils/test-runner.mjs";
-import { getWasm } from './utils/getWasm.mjs';
+import { getWasm } from "./utils/getWasm.mjs";
 
 const wasmBytes = await getWasm(import.meta.url);
+
+setSuccess("Congrats! Continue onto 009_data.wat");
 
 test("exports countDown, countUntil, and countEvenUntil", async () => {
   const exports = await instantiate(wasmBytes, {
@@ -59,6 +62,6 @@ test("countEvenUntil counts all even digits until a number", async () => {
   countEvenUntil(10);
   assert(
     arrayEquals(logOutput, [0, 2, 4, 6, 8]),
-    "We are not counting up until 10) with countEvenUntil"
+    "We are not counting up until 10 with countEvenUntil"
   );
 });

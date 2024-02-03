@@ -4,10 +4,13 @@ import {
   matchObjectShape,
   arrayEquals,
   test,
+  setSuccess,
 } from "./utils/test-runner.mjs";
 import { getWasm } from './utils/getWasm.mjs';
 
 const wasmBytes = await getWasm(import.meta.url);
+
+setSuccess("Congrats! Continue onto 011_host.wat");
 
 test("exports incrementData, doubleData", async () => {
   const memory = new WebAssembly.Memory({ initial: 1 });

@@ -3,6 +3,7 @@ import { instantiate } from './utils/instantiate.mjs';
 import { arrayEquals, assert, setSuccess, test } from './utils/test-runner.mjs';
 
 const wasmBytes = await getWasm(import.meta.url);
+
 setSuccess("Congrats! Continue onto 003_export.wat");
 
 test("calls log function with numbers", async () => {

@@ -1,12 +1,15 @@
 import {
   assert,
   matchObjectShape,
+  setSuccess,
   test,
 } from "./utils/test-runner.mjs";
 import { instantiate } from "./utils/instantiate.mjs";
 import { getWasm } from './utils/getWasm.mjs';
 
 const wasmBytes = await getWasm(import.meta.url);
+
+setSuccess("Congrats! Continue onto 004_function.wat");
 
 test("exports a main function", async () => {
   const log = () => void 0;

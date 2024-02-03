@@ -1,8 +1,10 @@
 import { instantiate } from "./utils/instantiate.mjs";
-import { assert, matchObjectShape, test } from "./utils/test-runner.mjs";
+import { assert, matchObjectShape, setSuccess, test } from "./utils/test-runner.mjs";
 import { getWasm } from './utils/getWasm.mjs';
 
 const wasmBytes = await getWasm(import.meta.url);
+
+setSuccess("Congrats! Continue onto 007_conditionals.wat");
 
 test("exports doubleInt and doubleGlobal", async () => {
   const exports = await instantiate(wasmBytes);
