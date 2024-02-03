@@ -1,14 +1,12 @@
-let successMessage = 'Congrats! Move onto the next lesson.';
+import { createContext, getContext } from "./errorContext.mjs";
+
+let successMessage = "Congrats! Move onto the next lesson.";
 let failMessage = "Some tests failed!";
 
 /** @param {string} message */
-export const setSuccess = (message) => successMessage = message
+export const setSuccess = (message) => (successMessage = message);
 /** @param {string} message */
-export const setFailure = (message) => failMessage = message
-
-
-/** @type {string[]} */
-const expectStack = [];
+export const setFailure = (message) => (failMessage = message);
 
 /** @type {{ name: string, errors: string[] }[]} */
 const testResults = [];
@@ -25,46 +23,26 @@ const scheduleTestResult = () => {
       }
     }
 
-    console.log('----------------');
+    console.log("----------------");
 
     const isSuccess = testResults.every(({ errors }) => errors.length === 0);
     if (successMessage && isSuccess) {
       console.log(successMessage);
-    } else if (failMessage &&!isSuccess) {
+    } else if (failMessage && !isSuccess) {
       console.log(failMessage);
     }
   }, 0);
 };
 
-/** @type {Promise<void>} */
-let previousTest = Promise.resolve();
-
 /** @param {string} name, @param {() => Promise<void> | void} fn */
-export function test(name, fn) {
-  previousTest.then(async () => {
-    if (expectStack.length) {
-      expectStack.length = 0;
-    }
+export async function test(name, fn) {
+  const testResult = { name, errors: [] };
+  testResults.push(testResult);
 
-    const testResult = {
-      name: "unfinished test",
-      errors: ["test runner ran into an error (unexpected)"],
-    };
-    // @ts-ignore
-    testResults.push(testResult);
-
+  createContext(testResult.errors, async () => {
     try {
-      previousTest = Promise.resolve(fn());
-      await previousTest;
-      if (expectStack.length) {
-        testResult.name = name;
-        testResult.errors = expectStack;
-      } else {
-        testResult.name = name;
-        testResult.errors = [];
-      }
+      await fn();
     } catch (e) {
-      testResult.name = name;
       testResult.errors = [e.message];
     } finally {
       scheduleTestResult();
@@ -75,7 +53,7 @@ export function test(name, fn) {
 /** @param {boolean} boolExpression @param {string} errorMessage */
 export function assert(boolExpression, errorMessage) {
   if (!boolExpression) {
-    expectStack.push(errorMessage);
+    getContext().push(errorMessage);
   }
 }
 
