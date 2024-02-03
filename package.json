@@ -5,6 +5,7 @@
     "start": "node scripts/run.mjs",
     "build": "node scripts/build.mjs",
     "solve": "node scripts/solve.mjs",
+    "show": "node scripts/show-solution.mjs",
     "test": "vitest --run"
   },
   "devDependencies": {
