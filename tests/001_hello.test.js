@@ -1,7 +1,9 @@
 import { getWasm } from './utils/getWasm.mjs';
-import { assert, test } from './utils/test-runner.mjs';
+import { assert, test, setSuccess } from './utils/test-runner.mjs';
 
 const wasmBytes = await getWasm(import.meta.url);
+
+setSuccess("Congrats! Continue onto 002_ordering.wat");
 
 test("calls log function", async () => {
   let called = false;

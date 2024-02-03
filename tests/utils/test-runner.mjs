@@ -1,3 +1,12 @@
+let successMessage = 'Congrats! Move onto the next lesson.';
+let failMessage = "Some tests failed!";
+
+/** @param {string} message */
+export const setSuccess = (message) => successMessage = message
+/** @param {string} message */
+export const setFailure = (message) => failMessage = message
+
+
 /** @type {string[]} */
 const expectStack = [];
 
@@ -14,6 +23,15 @@ const scheduleTestResult = () => {
       if (errors.length) {
         console.log(errors.map((e) => `  · \x1b[31m${e}\x1b[0m`).join("\n"));
       }
+    }
+
+    console.log('----------------');
+
+    const isSuccess = testResults.every(({ errors }) => errors.length === 0);
+    if (successMessage && isSuccess) {
+      console.log(successMessage);
+    } else if (failMessage &&!isSuccess) {
+      console.log(failMessage);
     }
   }, 0);
 };
