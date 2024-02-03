@@ -1,5 +1,5 @@
 
-<div align = center >
+<div align=center>
 
 # Watlings
 
@@ -18,14 +18,6 @@ by fixing a bunch of small programs!
 
 <br>
 
-> [!WARNING]
-> This project is incomplete and in active development.  
-> Feel free to help out by filing issues and creating PRs!
-
-
-<br>
-<br>
-
 ## Usage
 
 This project uses **[Node 16+]** & **[NPM]** for compilation and testing.
@@ -40,7 +32,7 @@ cd watlings
 npm install
 ```
 
-<br>
+Complete lessons by following the instructions in each exercise within the `exercises` directory.
 
 Test your answer to an exercise with the `start` command:
 
@@ -58,21 +50,21 @@ npm run solve 001_hello
 
 <br>
 
-## Using Wat2Wasm Directly ( Recommended )
-
-For syntax highlighting and up-to-date builds, you can **optionally** use the official **[WebAssembly Binary Toolkit][WABT]** which will provide you with a `wat2wasm` CLI tool.
-
-If it is found on your path as `wat2wasm`, it will be used instead of **[NPM WABT]**.
-
-*While it is strictly optional, it can help with debugging.*
-
-<br>
-
-## Recommended Editor
+### Recommended Editor
 
 We recommend using **[VSCode]** with the **[WATI]** extension.
 
 This should provide syntax highlighting, intellisense, and other helpful features as you work through the exercises.
+
+
+### Using Wat2Wasm Directly (Recommended)
+
+To compile your WAT code, we use **[NPM WABT]**. 
+
+For syntax highlighting and up-to-date builds, you can **optionally** use the official **[WebAssembly Binary Toolkit][WABT]** which will provide you with a `wat2wasm` CLI tool. If it is found on your path as `wat2wasm`, it will be used instead.
+
+*While it is strictly optional, it can help with debugging.*
+
 
 <br>
 
@@ -122,8 +114,8 @@ When introducing a lot of new syntax, keep the problem scope small, but force th
 
 [NPM WABT]: https://www.npmjs.com/package/wabt
 [VSCode]: https://code.visualstudio.com
-[WATI]: https://github.com/NateLevin1/wati
-[WABT]: https://github.com/WebAssembly/wabt
+[WATI]: https://marketplace.visualstudio.com/items?itemName=NateLevin.wati
+[WABT]: https://github.com/WebAssembly/wabt/releases/
 [Node 16+]: https://nodejs.org/en
 [NPM]: https://www.npmjs.com/
 
