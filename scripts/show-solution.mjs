@@ -2,17 +2,12 @@ import { readdir, readFile, writeFile } from 'fs/promises';
 import { basename, extname, } from 'path';
 import { parsePatch, patch } from './utils/patch.mjs';
 import { fileURLToPath } from 'node:url';
+import { findFile } from './utils/findFile.mjs';
 
 // Strip path and extension from argument
-const targetFileName = basename(process.argv[2], extname(process.argv[2]));
-
-const folderFiles = await readdir(fileURLToPath(new URL('../exercises', import.meta.url)));
-const sourceFileNameWithExt = folderFiles.find(fileName => {
-  return fileName.includes(targetFileName) && fileName.endsWith('.wat');
-});
-
+const sourceFileNameWithExt = await findFile(process.argv[2], 'patch');
 if (!sourceFileNameWithExt) {
-  console.log(`No file matching ${targetFileName} found in the exercises folder.`);
+  console.log(`No file matching ${process.argv[2]} found in the exercises folder.`);
   process.exit(1);
 }
 

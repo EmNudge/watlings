@@ -6,7 +6,7 @@
     "build": "node scripts/build.mjs",
     "solve": "node scripts/solve.mjs",
     "show": "node scripts/show-solution.mjs",
-    "test": "vitest --run"
+    "test": "node scripts/test.mjs"
   },
   "devDependencies": {
     "vitest": "^0.34.1"
