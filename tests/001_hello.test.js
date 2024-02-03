@@ -1,8 +1,7 @@
+import { getWasm } from './utils/getWasm.mjs';
 import { assert, test } from './utils/test-runner.mjs';
-import fs from "fs/promises";
 
-const { 1: baseName } = import.meta.url.match(/\/([^\/.]+)[^\/]+$/);
-const wasmBytes = await fs.readFile(`./.cache/${baseName}.wasm`);
+const wasmBytes = await getWasm(import.meta.url);
 
 test("calls log function", async () => {
   let called = false;

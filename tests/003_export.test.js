@@ -4,10 +4,9 @@ import {
   test,
 } from "./utils/test-runner.mjs";
 import { instantiate } from "./utils/instantiate.mjs";
-import fs from "fs/promises";
+import { getWasm } from './utils/getWasm.mjs';
 
-const { 1: baseName } = import.meta.url.match(/\/([^\/.]+)[^\/]+$/);
-const wasmBytes = await fs.readFile(`./.cache/${baseName}.wasm`);
+const wasmBytes = await getWasm(import.meta.url);
 
 test("exports a main function", async () => {
   const log = () => void 0;
