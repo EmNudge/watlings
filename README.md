@@ -42,7 +42,13 @@ npm start 001_hello
 
 <br>
 
-If you'd like to view the solution to an exercise, use the `solve` command:
+If you'd like to view the solution to an exercise, use the `show` command:
+
+```sh
+npm run show 001_hello
+```
+
+To apply it directly to the exercise, use `solve` instead of `show`:
 
 ```sh
 npm run solve 001_hello
