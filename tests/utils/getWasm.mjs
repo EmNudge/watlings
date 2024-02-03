@@ -13,10 +13,6 @@ export async function getWasm(path) {
   const baseName = getBaseName(path);
 
   const filePath = fileURLToPath(new URL(`../../.cache/${baseName}.wasm`, import.meta.url));
-  try {
-    return await fs.readFile(filePath);
-  } catch {
-    await compileFiles(baseName);
-    return await fs.readFile(filePath);
-  }
+  await compileFiles(baseName);
+  return await fs.readFile(filePath);
 }

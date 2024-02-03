@@ -6,6 +6,7 @@ const testResults = [];
 let lastTestResultId;
 const scheduleTestResult = () => {
   clearTimeout(lastTestResultId);
+
   lastTestResultId = setTimeout(() => {
     for (const { name, errors } of testResults) {
       const marker = errors.length ? "\x1b[31m✘" : "\x1b[32m✓";
@@ -17,28 +18,40 @@ const scheduleTestResult = () => {
   }, 0);
 };
 
+/** @type {Promise<void>} */
+let previousTest = Promise.resolve();
+
 /** @param {string} name, @param {() => Promise<void> | void} fn */
-export async function test(name, fn) {
-  const testResult = { name: 'unfinished test', errors: ['test runner ran into an error (unexpected)' ]};
-  // @ts-ignore
-  testResults.push(testResult);
-
-  try {
-    await fn();
+export function test(name, fn) {
+  previousTest.then(async () => {
     if (expectStack.length) {
-      testResult.name = name;
-      testResult.errors = expectStack;
       expectStack.length = 0;
-    } else {
-      testResult.name = name;
-      testResult.errors = [];
     }
-  } catch (e) {
-    testResult.name = name;
-    testResult.errors = [e.message];
-  }
 
-  scheduleTestResult();
+    const testResult = {
+      name: "unfinished test",
+      errors: ["test runner ran into an error (unexpected)"],
+    };
+    // @ts-ignore
+    testResults.push(testResult);
+
+    try {
+      previousTest = Promise.resolve(fn());
+      await previousTest;
+      if (expectStack.length) {
+        testResult.name = name;
+        testResult.errors = expectStack;
+      } else {
+        testResult.name = name;
+        testResult.errors = [];
+      }
+    } catch (e) {
+      testResult.name = name;
+      testResult.errors = [e.message];
+    } finally {
+      scheduleTestResult();
+    }
+  });
 }
 
 /** @param {boolean} boolExpression @param {string} errorMessage */
