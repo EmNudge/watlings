@@ -27,7 +27,22 @@ const PATCH_REGEX_SOURCE = [
 ].map(regex => regex.source).join('');
 const PATCH_REGEX = new RegExp(PATCH_REGEX_SOURCE, 'g');
 
-/** @param {string} patchString @param {string} targetString */
+/** @param {string} patchString */
+export function parsePatch(patchString) {
+  return [...patchString.matchAll(PATCH_REGEX)].map(({ groups }) => {
+    const { srcRange, addLines, delLines } = groups;
+
+    const [start, end] = srcRange.split(',').map(Number);
+    const length = end ? end - (start - 1) : 1;
+    const lines = addLines?.trim().split('\n').map(line => line.slice(2)) ?? [];
+    return { start, deleteCount: length, addLines: lines, delLines };
+  })
+}
+
+/** 
+ * @param {string} patchString 
+ * @param {string} targetString 
+ */
 export function patch(patchString, targetString) {
   // Fix Windows inserting carriage returns
   if (process.platform === 'win32') {
@@ -37,17 +52,12 @@ export function patch(patchString, targetString) {
 
   const targetArr = targetString.split('\n');
 
-  for (const match of patchString.matchAll(PATCH_REGEX)) {
-    const { srcRange, addLines, delLines } = match.groups;
+  for (const { delLines, addLines, deleteCount, start } of parsePatch(patchString)) {
     if (delLines && !targetString.includes(delLines.slice(1).replace(/< /g, ''))) {
       throw new Error('Patch contains deletion that does not exist in target');
     }
 
-    const [start, end] = srcRange.split(',').map(Number);
-    const length = end ? end - (start - 1) : 1;
-    const lines = addLines?.trim().split('\n').map(line => line.slice(2)) ?? [];
-
-    targetArr.splice(start - 1, length, ...lines);
+    targetArr.splice(start - 1, deleteCount, ...addLines);
   }
 
   return targetArr.join('\n');
