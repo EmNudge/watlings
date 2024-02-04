@@ -31,6 +31,7 @@ const scheduleTestResult = () => {
     } else if (failMessage && !isSuccess) {
       console.log(failMessage);
     }
+    testResults.length = 0;
   }, 0);
 };
 
@@ -85,21 +86,33 @@ export function matchObjectShape(a, b) {
       return false;
     }
 
-    if (b[key] === Function && typeof a[key] !== "function") return false;
-    if (b[key] === Object && typeof a[key] !== "object") return false;
-    if (b[key] === Number && typeof a[key] !== "number") return false;
-    if (b[key] === String && typeof a[key] !== "string") return false;
-    if (b[key] === Boolean && typeof a[key] !== "boolean") return false;
-    if (b[key] === WebAssembly.Memory && a[key] instanceof WebAssembly.Memory)
-      return false;
-
-    if (typeof a[key] === "object") {
-      // @ts-ignore
-      if (!matchObjectShape(a[key], b[key])) {
-        return false;
-      }
+    if (b[key] === Function && typeof a[key] === "function") {
+      continue;
     }
+    if (b[key] === Object && typeof a[key] === "object") {
+      continue;
+    }
+    if (b[key] === Number && typeof a[key] === "number") {
+      continue;
+    }
+    if (b[key] === String && typeof a[key] === "string") {
+      continue;
+    }
+    if (b[key] === Boolean && typeof a[key] === "boolean") {
+      continue;
+    }
+    if (b[key] === WebAssembly.Memory && a[key] instanceof WebAssembly.Memory) {
+      continue;
+    }
+    // @ts-ignore
+    if (typeof a[key] === "object" && matchObjectShape(a[key], b[key])) {
+      continue;
+    }
+
+    return false;
   }
+
+  return true;
 }
 
 /** @param {() => any} fn */
