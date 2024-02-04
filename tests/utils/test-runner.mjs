@@ -57,6 +57,8 @@ export function assert(boolExpression, errorMessage) {
   }
 }
 
+// Boolean functions below
+
 /** @param {any[]} a @param {any[]} b */
 export function arrayEquals(a, b) {
   if (a.length !== b.length) return false;
@@ -97,5 +99,15 @@ export function matchObjectShape(a, b) {
         return false;
       }
     }
+  }
+}
+
+/** @param {() => any} fn */
+export function throws(fn) {
+  try {
+    fn();
+    return false;
+  } catch (e) {
+    return true;
   }
 }
