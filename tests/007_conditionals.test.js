@@ -5,14 +5,14 @@ import {
   setSuccess,
   test,
 } from "./utils/test-runner.mjs";
-import { getWasm } from './utils/getWasm.mjs';
+import { getWasm } from "./utils/getWasm.mjs";
 
 const wasmBytes = await getWasm(import.meta.url);
 
 setSuccess("Congrats! Continue onto 008_loops.wat");
 
 test("exports isEven and getNum", async () => {
-const exports = await instantiate(wasmBytes)
+  const exports = await instantiate(wasmBytes);
   assert(
     matchObjectShape(exports, {
       isEven: Function,
@@ -23,15 +23,15 @@ const exports = await instantiate(wasmBytes)
 });
 
 test("isEven works", async () => {
-const exports = await instantiate(wasmBytes)
+  const exports = await instantiate(wasmBytes);
   const { isEven } = exports;
-  assert(isEven(42) === 1, "isEven is not returning 1");;
-  assert(isEven(43) === 0, "isEven is not returning 0");;
+  assert(isEven(42) === 1, "isEven is not returning 1");
+  assert(isEven(43) === 0, "isEven is not returning 0");
 });
 
 test("getNum works", async () => {
-const exports = await instantiate(wasmBytes)
+  const exports = await instantiate(wasmBytes);
   const { getNum } = exports;
-  assert(getNum(42) === 42, "getNum is not returning 42");;;
-  assert(getNum(43) === 100, "getNum is not returning 100");;;;
+  assert(getNum(42) === 42, "getNum is not returning 42");
+  assert(getNum(43) === 100, "getNum is not returning 100");
 });

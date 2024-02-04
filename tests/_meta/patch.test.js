@@ -1,10 +1,14 @@
-import { expect, test, describe } from "vitest";
 import { readdir, readFile } from "node:fs/promises";
 import path, { basename } from "node:path";
 import { patch as applyPatch } from "../../scripts/utils/patch.mjs";
+import { test, assert, throws, setSuccess } from "../utils/test-runner.mjs";
+import { fileURLToPath } from "node:url";
 
-/** @param {string} folderPath */
-const getFilesInFolder = async (folderPath) => {
+setSuccess("Patches are all working correctly.")
+
+/** @param {string} relativePath */
+const getFilesInFolder = async (relativePath) => {
+  const folderPath = fileURLToPath(new URL(relativePath, import.meta.url));
   const folderFiles = await readdir(folderPath);
 
   const fileReads = folderFiles
@@ -20,8 +24,8 @@ const getFilesInFolder = async (folderPath) => {
 /** @returns {Promise<Map<string, { exercise: string, patch?: string }>>} */
 const getPatchMap = async () => {
   const [exercises, patches] = await Promise.all([
-    getFilesInFolder(path.resolve(__dirname, "../../exercises")),
-    getFilesInFolder(path.resolve(__dirname, "../../patch")),
+    getFilesInFolder("../../exercises"),
+    getFilesInFolder("../../patch"),
   ]);
 
   const map = new Map();
@@ -45,21 +49,20 @@ const getPatchMap = async () => {
   return map;
 };
 
-describe("each file has an associated patch", async () => {
+test("each file has an associated patch", async () => {
   const patchMap = await getPatchMap();
 
   for (const [name, { patch }] of patchMap) {
-    test(`patch exists for ${name}`, () => {
-      assert(patch).toBeDefined();
-    });
+    assert(patch !== undefined, `patch does not exists for ${name}`);
   }
 });
 
-describe("can apply patch", async () => {
+test("can apply patch", async () => {
   const patchMap = await getPatchMap();
   for (const [name, { patch, exercise }] of patchMap) {
-    test(`patching ${name}`, () => {
-      assert(() => applyPatch(patch, exercise)).not.toThrowError();
-    });
+    assert(
+      !throws(() => applyPatch(patch, exercise)),
+      `could not patch ${name}`
+    );
   }
 });

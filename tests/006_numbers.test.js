@@ -1,6 +1,11 @@
 import { instantiate } from "./utils/instantiate.mjs";
-import { assert, matchObjectShape, setSuccess, test } from "./utils/test-runner.mjs";
-import { getWasm } from './utils/getWasm.mjs';
+import {
+  assert,
+  matchObjectShape,
+  setSuccess,
+  test,
+} from "./utils/test-runner.mjs";
+import { getWasm } from "./utils/getWasm.mjs";
 
 const wasmBytes = await getWasm(import.meta.url);
 

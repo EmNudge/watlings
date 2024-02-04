@@ -5,7 +5,7 @@ import {
   setSuccess,
   test,
 } from "./utils/test-runner.mjs";
-import { getWasm } from './utils/getWasm.mjs';
+import { getWasm } from "./utils/getWasm.mjs";
 
 const wasmBytes = await getWasm(import.meta.url);
 
@@ -34,7 +34,10 @@ test("doubleGlobal doubles input value", async () => {
 
   assert(exports.doubleGlobal() === 0, "global_num is not 0 on program start");
   global_num.value = 10;
-  assert(exports.doubleGlobal() === 20, "global_num is doubling when calling doubleGlobal");
+  assert(
+    exports.doubleGlobal() === 20,
+    "global_num is doubling when calling doubleGlobal"
+  );
 });
 
 test("incGlobal increments a global each call", async () => {
@@ -44,5 +47,8 @@ test("incGlobal increments a global each call", async () => {
   });
 
   assert(exports.incGlobal() === 1, "incGlobal is not 1 on program start");
-  assert(exports.incGlobal() === 2, "incGlobal is not incrementing when calling incGlobal");
+  assert(
+    exports.incGlobal() === 2,
+    "incGlobal is not incrementing when calling incGlobal"
+  );
 });

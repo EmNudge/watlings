@@ -5,7 +5,7 @@ import {
   setSuccess,
   test,
 } from "./utils/test-runner.mjs";
-import { getWasm } from './utils/getWasm.mjs';
+import { getWasm } from "./utils/getWasm.mjs";
 
 const wasmBytes = await getWasm(import.meta.url);
 
