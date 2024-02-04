@@ -1,6 +1,6 @@
-import { readdir, readFile, writeFile } from "fs/promises";
-import { basename, extname } from "path";
-import { parsePatch, patch } from "./utils/patch.mjs";
+import { readFile } from "node:fs/promises";
+import { basename } from "node:path";
+import { parsePatch } from "./utils/patch.mjs";
 import { fileURLToPath } from "node:url";
 import { findFile } from "./utils/findFile.mjs";
 
