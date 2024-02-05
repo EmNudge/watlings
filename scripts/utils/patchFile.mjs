@@ -3,6 +3,7 @@ import { basename } from "path";
 import { patch } from "./patch.mjs";
 import { fileURLToPath } from "node:url";
 import { findFile } from "./findFile.mjs";
+import { colors } from "./colors.mjs";
 
 export async function patchFile(stub = process.argv[2]) {
   const sourceFileNameWithExt = await findFile(stub, "patch");
@@ -31,9 +32,9 @@ export async function patchFile(stub = process.argv[2]) {
 
     await writeFile(sourceFilePath, patchedContent);
 
-    console.log(`Patch applied successfully to: ${nameBase}`);
+    console.log(`Patch applied successfully to: ${colors.bold(nameBase)}`);
   } catch (e) {
-    console.error(`Error applying patch: ${e.message}`);
+    console.error(`Error applying patch: ${colors.red(e.message)}`);
     console.info(
       "\nYou may want to stash your changes to the file before trying again,"
     );

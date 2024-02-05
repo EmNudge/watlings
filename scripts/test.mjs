@@ -1,9 +1,10 @@
 import { fileURLToPath } from 'node:url';
 import { findFile } from './utils/findFile.mjs';
 
-const sourceFileNameWithExt = await findFile(process.argv[2], 'tests');
+const stub = process.argv[2] ?? '001_hello';
+const sourceFileNameWithExt = await findFile(stub, 'tests');
 if (!sourceFileNameWithExt) {
-  console.log(`No file matching "${process.argv[2]}" found in the tests folder.`);
+  console.log(`No file matching "${stub}" found in the tests folder.`);
   process.exit(1);
 }
 

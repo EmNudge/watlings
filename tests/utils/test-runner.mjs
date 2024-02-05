@@ -1,3 +1,4 @@
+import { colors } from "../../scripts/utils/colors.mjs";
 import { createContext, getContext } from "./errorContext.mjs";
 
 let successMessage = "Congrats! Move onto the next lesson.";
@@ -16,10 +17,10 @@ const scheduleTestResult = () => {
 
   lastTestResultId = setTimeout(() => {
     for (const { name, errors } of testResults) {
-      const marker = errors.length ? "\x1b[31m✘" : "\x1b[32m✓";
-      console.log(`${marker} \x1b[0m${name}`);
+      const marker = errors.length ? colors.red("✘") : colors.green("✓");
+      console.log(`${marker} ${name}`);
       if (errors.length) {
-        console.log(errors.map((e) => `  · \x1b[31m${e}\x1b[0m`).join("\n"));
+        console.log(errors.map((e) => `  · ${colors.red(e)}`).join("\n"));
       }
     }
 
