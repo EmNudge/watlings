@@ -33,7 +33,7 @@ try {
     .join("\n\n");
 
   console.log(
-    `Try adding this to file ${colors.bold(sourceFileNameWithExt)}:\n\n${lines}`
+    `Try adding this to file ${colors.bold(nameBase)}.wat:\n\n${lines}`
   );
 } catch (e) {
   console.error(`Error fetching solution: ${e.message}`);
