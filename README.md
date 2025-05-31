@@ -20,16 +20,13 @@ by fixing a bunch of small programs!
 
 ## Usage
 
-This project uses **[Node 16+]** & **[NPM]** for compilation and testing.
+This project uses **[Node 16+]** & **[wasm-tools]** for compilation and testing.
 
 <br>
-
-Clone the repository and install dependencies with:
 
 ```sh
 git clone git@github.com:EmNudge/watlings.git
 cd watlings
-npm install
 ```
 
 Complete lessons by following the instructions in each exercise within the `exercises` directory.
@@ -63,13 +60,13 @@ We recommend using **[VSCode]** with the **[WATI]** extension.
 This should provide syntax highlighting, intellisense, and other helpful features as you work through the exercises.
 
 
-### Using Wat2Wasm Directly (Recommended)
+### Using wasm-tools CLI
 
-To compile your WAT code, we use **[NPM WABT]**. 
+To compile your WAT code, this project uses the `wasm-tools` CLI.
 
-For syntax highlighting and up-to-date builds, you can **optionally** use the official **[WebAssembly Binary Toolkit][WABT]** which will provide you with a `wat2wasm` CLI tool. If it is found on your path as `wat2wasm`, it will be used instead.
+Install `wasm-tools` and ensure `wasm-tools` is on your PATH. The scripts will invoke `wasm-tools parse` under the hood.
 
-*While it is strictly optional, it can help with debugging.*
+See install instructions: [wasm-tools][wasm-tools]
 
 
 <br>
@@ -122,6 +119,7 @@ When introducing a lot of new syntax, keep the problem scope small, but force th
 [VSCode]: https://code.visualstudio.com
 [WATI]: https://marketplace.visualstudio.com/items?itemName=NateLevin.wati
 [WABT]: https://github.com/WebAssembly/wabt/releases/
+[wasm-tools]: https://github.com/bytecodealliance/wasm-tools
 [Node 16+]: https://nodejs.org/en
 [NPM]: https://www.npmjs.com/
 

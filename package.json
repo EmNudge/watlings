@@ -8,9 +8,7 @@
     "solve": "node scripts/solve.mjs",
     "show": "node scripts/show-solution.mjs"
   },
-  "dependencies": {
-    "wabt": "^1.0.32"
-  },
+  "dependencies": {},
   "devDependencies": {
     "@types/node": "^20.11.16"
   }
