@@ -6,7 +6,7 @@ import { getWastParser } from "./getWastParser.mjs";
 /**
  * Get SHA-1 hash of file - used for detecting updates
  *
- * @param {ArrayBuffer} buffer file buffer
+ * @param {Buffer} buffer file buffer
  * @returns {Promise<string>}
  */
 const getSha1Hash = async (buffer) => {

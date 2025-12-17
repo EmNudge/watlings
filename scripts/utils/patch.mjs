@@ -23,7 +23,7 @@ const PATCH_REGEX_SOURCE = [
   /([0-9]+(?:,[0-9]+)?)/,            // RANGE
   /(?<delLines>\n(?:<[^\n]+\n)+)?/,  // DEL_BODY
   /(?:---)?/,
-  /(?<addLines>(?:\n>[^\n]+)+)?/,    // ADD_BODY
+  /(?<addLines>(?:\n>[^\n]*)+)?/,    // ADD_BODY
 ].map(regex => regex.source).join('');
 const PATCH_REGEX = new RegExp(PATCH_REGEX_SOURCE, 'g');
 

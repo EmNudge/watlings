@@ -1,0 +1,12 @@
+23c23
+<     ;; TODO: create and return a new point
+---
+>     (struct.new $point (local.get $x) (local.get $y))
+27c27
+<     ;; TODO: return the x field
+---
+>     (struct.get $point $x (local.get $p))
+31c31
+<     ;; TODO: return the y field
+---
+>     (struct.get $point $y (local.get $p))
