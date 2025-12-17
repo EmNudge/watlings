@@ -9,7 +9,7 @@
       (call $log_num (i32.const 42))
     )
 
-  Export our $main function instead of calling it immediately.
+  Export our $main function with the name "main" instead of calling it immediately.
 ;)
 
 (module
