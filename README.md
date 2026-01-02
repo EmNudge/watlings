@@ -55,7 +55,7 @@ npm run solve 001_hello
 
 ### Recommended Editor
 
-We recommend using **[VSCode]** with the **[WATI]** extension.
+We recommend using **[VSCode]** with the **[wat-lsp]** extension.
 
 This should provide syntax highlighting, intellisense, and other helpful features as you work through the exercises.
 
@@ -117,7 +117,7 @@ When introducing a lot of new syntax, keep the problem scope small, but force th
 
 [NPM WABT]: https://www.npmjs.com/package/wabt
 [VSCode]: https://code.visualstudio.com
-[WATI]: https://marketplace.visualstudio.com/items?itemName=NateLevin.wati
+[wat-lsp]: https://marketplace.visualstudio.com/items?itemName=EmNudge.wat-lsp
 [WABT]: https://github.com/WebAssembly/wabt/releases/
 [wasm-tools]: https://github.com/bytecodealliance/wasm-tools
 [Node 16+]: https://nodejs.org/en
