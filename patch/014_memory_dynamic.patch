@@ -1,0 +1,8 @@
+19c19,23
+<     ;; TODO: grow by 1 page, fill first 10 bytes with 42, return new size
+---
+>     ;; grow by 1 page, compute new size (prev + 1)
+>     (i32.add (memory.grow (i32.const 1)) (i32.const 1))
+>
+>     ;; fill first 10 bytes with 42
+>     (memory.fill (i32.const 0) (i32.const 42) (i32.const 10))

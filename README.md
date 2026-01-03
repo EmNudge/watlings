@@ -20,7 +20,9 @@ by fixing a bunch of small programs!
 
 ## Usage
 
-This project uses **[Node 16+]** & **[wasm-tools]** for compilation and testing.
+This project uses **[Node 23+]** & **[wasm-tools]** for compilation and testing.
+
+> **Note:** Later exercises (015+) use newer WebAssembly features like exception handling and GC types that require the `--experimental-wasm-exnref` flag, which is only available in Node.js 23 and later.
 
 <br>
 
@@ -120,7 +122,7 @@ When introducing a lot of new syntax, keep the problem scope small, but force th
 [wat-lsp]: https://marketplace.visualstudio.com/items?itemName=EmNudge.wat-lsp
 [WABT]: https://github.com/WebAssembly/wabt/releases/
 [wasm-tools]: https://github.com/bytecodealliance/wasm-tools
-[Node 16+]: https://nodejs.org/en
+[Node 23+]: https://nodejs.org/en
 [NPM]: https://www.npmjs.com/
 
 [Roadmap]: https://github.com/users/EmNudge/projects/1

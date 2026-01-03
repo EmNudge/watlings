@@ -1,7 +1,7 @@
 (;
   WASM supports S-expressions and regular stack-based parameter handling.
 
-  If we wish we can write WAT like this:
+  If we wish, we can write WAT like this:
     i32.const 2   ;; push 2_i32 to the stack
     i32.const 18  ;; push 18_i32 to the stack
     i32.sub       ;; subtract the last 2 numbers and put it back on the stack (-16)

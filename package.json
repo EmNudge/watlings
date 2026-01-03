@@ -2,8 +2,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "start": "node scripts/test.mjs",
-    "test": "node scripts/test.mjs",
+    "start": "node --experimental-wasm-exnref scripts/test.mjs",
+    "test": "node --experimental-wasm-exnref scripts/test.mjs",
     "build": "node scripts/build.mjs",
     "solve": "node scripts/solve.mjs",
     "show": "node scripts/show-solution.mjs"
