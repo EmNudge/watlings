@@ -12,7 +12,7 @@
 
 (module
   ;; Get from host via import instead of exporting our own
-  (import "env" "mem" (memory 1)) ;; 1 page = 1KB
+  (import "env" "mem" (memory 1)) ;; 1 page = 64KB
 
   (func $increment_data (param $start i32) (param $end i32)
     (local $index i32)

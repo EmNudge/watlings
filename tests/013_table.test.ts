@@ -9,7 +9,7 @@ import {getWasm} from "./utils/getWasm.ts";
 
 const wasmBytes = await getWasm(import.meta.url);
 
-setSuccess("Congrats! You've finished the course!");
+setSuccess("Congrats! Continue onto 014");
 
 test("exports callFunc", async () => {
   const exports = await instantiate(wasmBytes, {
