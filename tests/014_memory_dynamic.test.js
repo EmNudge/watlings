@@ -10,7 +10,7 @@ import { getWasm } from "./utils/getWasm.mjs";
 
 const wasmBytes = await getWasm(import.meta.url);
 
-setSuccess("Congrats! Continue onto 017");
+setSuccess("Congrats! Continue onto 015");
 
 test("exports initAndSize and memory", async () => {
   const exports = await instantiate(wasmBytes, {});
