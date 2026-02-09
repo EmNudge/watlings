@@ -1,0 +1,505 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --bg: #1e1e2e;
+  --bg-sidebar: #181825;
+  --bg-panel: #1e1e2e;
+  --bg-output: #11111b;
+  --border: #313244;
+  --text: #cdd6f4;
+  --text-dim: #6c7086;
+  --text-bright: #f5f5f5;
+  --accent: #89b4fa;
+  --accent-hover: #74c7ec;
+  --green: #a6e3a1;
+  --red: #f38ba8;
+  --yellow: #f9e2af;
+  --code-bg: #11111b;
+  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+  --sidebar-width: 240px;
+}
+
+html,
+body {
+  height: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+#app {
+  height: 100vh;
+  overflow: hidden;
+}
+
+.app-grid {
+  display: grid;
+  grid-template-columns: var(--sidebar-width) 1fr 5px 1fr;
+  grid-template-rows: 1fr;
+  height: 100%;
+  transition: grid-template-columns 0.2s ease;
+}
+
+.app-grid.dragging {
+  transition: none;
+}
+
+.app-grid.sidebar-collapsed {
+  grid-template-columns: 40px 1fr 5px 1fr;
+}
+
+/* ── Sidebar ──────────────────────────────────────────────────── */
+
+.sidebar {
+  background: var(--bg-sidebar);
+  border-right: 1px solid var(--border);
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 16px 0;
+}
+
+.sidebar.collapsed {
+  padding: 8px 0;
+  overflow-y: hidden;
+}
+
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px 16px;
+}
+
+.sidebar.collapsed .sidebar-header {
+  justify-content: center;
+  padding: 4px 0;
+}
+
+.sidebar-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-bright);
+  letter-spacing: -0.01em;
+}
+
+.sidebar-toggle {
+  background: none;
+  border: none;
+  color: var(--text-dim);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition:
+    color 0.15s,
+    background 0.15s;
+}
+
+.sidebar-toggle:hover {
+  color: var(--text);
+  background: rgba(137, 180, 250, 0.1);
+}
+
+.chapter-title {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-dim);
+  padding: 12px 16px 4px;
+}
+
+.lesson-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 16px;
+  color: var(--text);
+  text-decoration: none;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.lesson-link:hover {
+  background: rgba(137, 180, 250, 0.1);
+}
+
+.lesson-link.active {
+  background: rgba(137, 180, 250, 0.15);
+  color: var(--accent);
+}
+
+.lesson-check {
+  width: 16px;
+  flex-shrink: 0;
+  text-align: center;
+  font-size: 12px;
+  color: var(--green);
+}
+
+/* ── Instructions panel ───────────────────────────────────────── */
+
+.instructions {
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  font-family: var(--font-mono);
+  min-width: 0;
+}
+
+.instructions-content {
+  flex: 1;
+  padding: 24px;
+}
+
+.instructions-nav {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 24px;
+  border-top: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.instructions h1 {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  color: var(--text-bright);
+}
+
+.instructions p {
+  font-size: 13px;
+  line-height: 1.7;
+  margin-bottom: 12px;
+}
+
+.instructions code {
+  background: var(--code-bg);
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+}
+
+.instructions pre {
+  background: var(--code-bg);
+  padding: 12px 16px;
+  border-radius: 6px;
+  overflow-x: auto;
+  margin-bottom: 12px;
+}
+
+.instructions pre code {
+  background: none;
+  padding: 0;
+  font-size: 13px;
+  line-height: 1.5;
+  display: block;
+  white-space: pre;
+}
+
+/* ── Drag handle ──────────────────────────────────────────────── */
+
+.drag-handle {
+  width: 5px;
+  cursor: col-resize;
+  background: var(--border);
+  flex-shrink: 0;
+  transition: background 0.15s;
+}
+
+.drag-handle:hover,
+.drag-handle.dragging {
+  background: var(--accent);
+}
+
+/* ── Editor + Output panel ────────────────────────────────────── */
+
+.editor-panel {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-width: 0;
+}
+
+.editor-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-sidebar);
+  flex-shrink: 0;
+}
+
+.btn {
+  padding: 6px 14px;
+  border-radius: 4px;
+  border: none;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: #11111b;
+}
+
+.btn-primary:hover {
+  background: var(--accent-hover);
+}
+
+.btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-secondary {
+  background: var(--border);
+  color: var(--text);
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background: #45475a;
+}
+
+.btn-secondary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.toolbar-spacer {
+  flex: 1;
+}
+
+/* ── Editor tabs ─────────────────────────────────────────────── */
+
+.editor-tabs {
+  display: flex;
+  background: var(--bg-sidebar);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.editor-tab {
+  padding: 6px 16px;
+  font-size: 13px;
+  font-family: var(--font-mono);
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: var(--text-dim);
+  cursor: pointer;
+  transition:
+    color 0.15s,
+    border-color 0.15s;
+}
+
+.editor-tab:hover {
+  color: var(--text);
+}
+
+.editor-tab.active {
+  color: var(--text-bright);
+  border-bottom-color: var(--accent);
+}
+
+.editor-container {
+  flex: 1;
+  overflow: auto;
+}
+
+.editor-container .cm-editor {
+  height: 100%;
+}
+
+.editor-container .cm-scroller {
+  overflow: auto;
+}
+
+/* ── Console panel ────────────────────────────────────────────── */
+
+.console-panel {
+  background: var(--bg-output);
+  border-top: 1px solid var(--border);
+  padding: 12px 16px;
+  overflow-y: auto;
+  max-height: 180px;
+  flex-shrink: 0;
+}
+
+.console-line {
+  font-size: 13px;
+  font-family: var(--font-mono);
+  line-height: 1.5;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.console-log {
+  color: var(--text);
+}
+
+.console-info {
+  color: var(--accent);
+}
+
+.console-warn {
+  color: var(--yellow);
+}
+
+.console-error {
+  color: var(--red);
+}
+
+.console-empty {
+  color: var(--text-dim);
+  font-size: 13px;
+}
+
+.output-panel {
+  background: var(--bg-output);
+  border-top: 1px solid var(--border);
+  padding: 12px 16px;
+  overflow-y: auto;
+  max-height: 200px;
+  flex-shrink: 0;
+}
+
+.output-title {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-dim);
+  margin-bottom: 8px;
+}
+
+.test-result {
+  font-size: 13px;
+  font-family: var(--font-mono);
+  padding: 2px 0;
+}
+
+.test-pass {
+  color: var(--green);
+}
+
+.test-fail {
+  color: var(--red);
+}
+
+.test-error {
+  color: var(--red);
+  padding-left: 20px;
+  font-size: 12px;
+}
+
+.output-summary {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid var(--border);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.output-summary.success {
+  color: var(--green);
+}
+
+.output-summary.failure {
+  color: var(--red);
+}
+
+/* ── WAT LSP hover tooltip ────────────────────────────────────── */
+
+.wat-hover {
+  padding: 10px 14px;
+  max-width: 600px;
+  max-height: 400px;
+  overflow: auto;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.wat-hover hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 6px 0;
+}
+
+.wat-hover code {
+  background: rgba(0, 0, 0, 0.15);
+  padding: 2px 4px;
+  border-radius: 3px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
+
+.wat-hover-code {
+  margin: 8px 0;
+  padding: 8px 12px;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.15);
+  overflow: auto;
+}
+
+.wat-hover-code code {
+  background: transparent;
+  padding: 0;
+  display: block;
+  white-space: pre;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+/* ── Reference highlights ─────────────────────────────────────── */
+
+.cm-ref-highlight {
+  background: rgba(137, 180, 250, 0.2);
+  border-bottom: 1px solid var(--accent);
+  border-radius: 2px;
+}
+
+/* ── Loading state ────────────────────────────────────────────── */
+
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  font-size: 16px;
+  color: var(--text-dim);
+}
+
+/* ── Responsive ───────────────────────────────────────────────── */
+
+@media (max-width: 900px) {
+  .app-grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto 1fr;
+  }
+
+  .sidebar {
+    display: none;
+  }
+
+  .drag-handle {
+    display: none;
+  }
+
+  .instructions {
+    border-bottom: 1px solid var(--border);
+    max-height: 40vh;
+  }
+}

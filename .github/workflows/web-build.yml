@@ -1,0 +1,48 @@
+name: Web Build CI
+
+on:
+  push:
+    branches: [main]
+    paths: [web-build/**, exercises/**, patch/**]
+  pull_request:
+    paths: [web-build/**, exercises/**, patch/**]
+
+defaults:
+  run:
+    working-directory: web-build
+
+jobs:
+  chapter-parity:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Check exercise ↔ chapter parity
+        run: node check-chapters.mjs
+
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: web-build/package-lock.json
+
+      - run: npm ci
+
+      - name: Generate lessons
+        run: npm run generate
+
+      - name: Check formatting
+        run: npm run format:check
+
+      - name: Type check
+        run: npm run typecheck
+
+      - name: Build
+        run: npm run build
