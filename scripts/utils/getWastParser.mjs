@@ -1,7 +1,7 @@
 import fs from "node:fs/promises";
 import { spawn } from "node:child_process";
 import { fileURLToPath } from "node:url";
-import { basename } from "path";
+import { basename } from "node:path";
 
 /** @typedef {Promise<(filePath: string) => Promise<undefined>>} WastParser */
 

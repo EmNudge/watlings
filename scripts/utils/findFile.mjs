@@ -1,5 +1,5 @@
-import { readdir } from "fs/promises";
-import { basename, extname } from "path";
+import { readdir } from "node:fs/promises";
+import { basename, extname } from "node:path";
 import { fileURLToPath } from "node:url";
 
 /** @param {string} stub @param {'exercises' | 'patch' | 'tests'} dir */

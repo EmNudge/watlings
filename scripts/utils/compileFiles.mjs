@@ -60,11 +60,11 @@ async function getChangedFiles(files) {
 
   const fileHashes = await Promise.all(filePromises);
 
-  const changedFiled = fileHashes
+  const changedFiles = fileHashes
     .filter(([name, hash]) => contents.get(name) !== hash)
     .map(([name]) => name);
 
-  return changedFiled;
+  return changedFiles;
 }
 
 /** @param {string | undefined} fileNameFilter */
@@ -97,43 +97,45 @@ export async function compileFiles(fileNameFilter = process.argv[2]) {
   const cacheFileHandle = await fs.open(cachePath, "a");
 
   let successCount = 0;
-  await Promise.all(
-    fileNames.map(async (file) => {
-      try {
-        const jsFilePath = fileURLToPath(
-          new URL(
-            "../../exercises/" + file.replace(/\.[^.]+$/, ".mjs"),
-            import.meta.url
-          )
+  try {
+    await Promise.all(
+      fileNames.map(async (file) => {
+        try {
+          const jsFilePath = fileURLToPath(
+            new URL(
+              "../../exercises/" + file.replace(/\.[^.]+$/, ".mjs"),
+              import.meta.url
+            )
+          );
+          await fs.access(jsFilePath);
+
+          console.log(`Running associated JS file for ${file}`);
+          await import(jsFilePath);
+          console.log("_".repeat(32) + "\n");
+          return;
+        } catch {}
+
+        const filePath = fileURLToPath(
+          new URL("../../exercises/" + file, import.meta.url)
         );
-        await fs.access(jsFilePath);
 
-        console.log(`Running associated JS file for ${file}`);
-        await import(jsFilePath);
-        console.log("_".repeat(32) + "\n");
-        return;
-      } catch {}
+        try {
+          await parseWast(filePath);
 
-      const filePath = fileURLToPath(
-        new URL("../../exercises/" + file, import.meta.url)
-      );
-
-      try {
-        await parseWast(filePath);
-
-        // add WAT hash
-        const fileBytes = await fs.readFile(filePath);
-        const hash = await getSha1Hash(fileBytes);
-        cacheFileHandle.write(`${file}:${hash}\n`);
-        successCount++;
-      } catch (e) {
-        console.error(`Error at ${filePath}:`, e);
-        process.exit(1);
-      }
-    })
-  );
-
-  await cacheFileHandle.close();
+          // add WAT hash
+          const fileBytes = await fs.readFile(filePath);
+          const hash = await getSha1Hash(fileBytes);
+          cacheFileHandle.write(`${file}:${hash}\n`);
+          successCount++;
+        } catch (e) {
+          console.error(`Error at ${filePath}:`, e);
+          process.exit(1);
+        }
+      })
+    );
+  } finally {
+    await cacheFileHandle.close();
+  }
 
   console.log(`compiled ${successCount} file${successCount === 1 ? "" : "s"}`);
 }

@@ -7,7 +7,7 @@
   There is nothing you must fix here, but feel free to play around.
 */
 
-import fs from "fs/promises";
+import fs from "node:fs/promises";
 import { getWastParser } from "../scripts/utils/getWastParser.mjs";
 
 // parse WAT file to WASM and read it as Buffer

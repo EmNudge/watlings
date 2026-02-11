@@ -1,5 +1,5 @@
-import { readFile, writeFile } from "fs/promises";
-import { basename } from "path";
+import { readFile, writeFile } from "node:fs/promises";
+import { basename } from "node:path";
 import { patch } from "./patch.mjs";
 import { fileURLToPath } from "node:url";
 import { findFile } from "./findFile.mjs";

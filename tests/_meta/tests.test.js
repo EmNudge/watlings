@@ -1,8 +1,7 @@
-import { fileURLToPath } from "url";
+import { fileURLToPath } from "node:url";
 import { test } from "../utils/test-runner.mjs";
-import { readdir } from "fs/promises";
-import path from "path";
-import { patchFile } from "../../scripts/utils/patchFile.mjs";
+import { readdir } from "node:fs/promises";
+import path from "node:path";
 
 /** @param {number} ms */
 const wait = (ms = 0) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -18,10 +17,8 @@ test("can run all tests", async () => {
       name: fileName,
     }));
 
-
   for (const { path, name } of testFiles) {
     console.log(`running "${name}":`);
-    // await patchFile(name.split('.')[0]);
     await import(path);
     await wait(100);
   }
