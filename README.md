@@ -3,12 +3,10 @@
 
 # Watlings
 
-Learn the WebAssembly Text Format  
+Learn the WebAssembly Text Format
 by fixing a bunch of small programs!
 
-<br>
-
-[![Button Roadmap]][Roadmap]
+**[Try it in your browser!][Web Version]**
 
 <br>
 
@@ -125,9 +123,7 @@ When introducing a lot of new syntax, keep the problem scope small, but force th
 [Node 23+]: https://nodejs.org/en
 [NPM]: https://www.npmjs.com/
 
-[Roadmap]: https://github.com/users/EmNudge/projects/1
-
-[Button Roadmap]: https://img.shields.io/badge/Roadmap-19A974?style=for-the-badge&logoColor=white&logo=openstreetmap
+[Web Version]: https://watlings.emnudge.dev
 
 [Rustlings]: https://github.com/rust-lang/rustlings
 [ziglings]: https://github.com/ratfactor/ziglings
