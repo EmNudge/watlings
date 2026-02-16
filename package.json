@@ -4,6 +4,7 @@
   "scripts": {
     "start": "node --experimental-wasm-exnref scripts/test.mjs",
     "test": "node --experimental-wasm-exnref scripts/test.mjs",
+    "ci:check": "node --experimental-wasm-exnref scripts/ci-check.mjs",
     "build": "node scripts/build.mjs",
     "solve": "node scripts/solve.mjs",
     "show": "node scripts/show-solution.mjs"

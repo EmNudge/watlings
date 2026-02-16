@@ -31,6 +31,7 @@ const scheduleTestResult = () => {
       console.log(successMessage);
     } else if (failMessage && !isSuccess) {
       console.log(failMessage);
+      process.exitCode = 1;
     }
     testResults.length = 0;
   }, 0);

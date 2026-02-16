@@ -1,4 +1,4 @@
-17c17
+19c19
 <     ;; TODO: call $log_num here
 ---
 >     (call $log_num (i32.const 42))

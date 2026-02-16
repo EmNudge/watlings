@@ -1,0 +1,29 @@
+name: Exercises CI
+
+on:
+  push:
+    branches: [main]
+    paths: [exercises/**, patch/**, tests/**, scripts/**]
+  pull_request:
+    paths: [exercises/**, patch/**, tests/**, scripts/**]
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 23
+
+      - name: Install wasm-tools
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release download --repo bytecodealliance/wasm-tools --pattern 'wasm-tools-*-x86_64-linux.tar.gz'
+          tar xzf wasm-tools-*-x86_64-linux.tar.gz
+          echo "$PWD/$(ls -d wasm-tools-*-x86_64-linux)" >> "$GITHUB_PATH"
+
+      - name: Verify exercises fail before patch and pass after
+        run: npm run ci:check
