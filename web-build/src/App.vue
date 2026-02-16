@@ -5,12 +5,14 @@ import { useLessons } from "./composables/useLessons";
 import { isCompleted, markCompleted, hashCode, saveDraft, loadDraft } from "./progress";
 import { runTests, runHostPreview } from "./runner";
 import { fireCelebration } from "./confetti";
+import { highlightWatCode } from "./highlight";
 import Sidebar from "./components/Sidebar.vue";
 import WatEditor from "./components/WatEditor.vue";
 import JsEditor from "./components/JsEditor.vue";
 
 const { data, currentChapter, currentLesson, navigateTo, getAdjacentLesson } = useLessons();
 
+const instructionsEl = ref<HTMLDivElement>();
 const sidebarCollapsed = ref(false);
 const editorRef = ref<InstanceType<typeof WatEditor>>();
 const jsEditorRef = ref<InstanceType<typeof JsEditor>>();
@@ -123,6 +125,20 @@ watch(
     if (newLesson?.hostCode) {
       await nextTick();
       schedulePreview();
+    }
+  },
+  { immediate: true },
+);
+
+// Highlight code blocks in instructions after render
+watch(
+  currentLesson,
+  async () => {
+    await nextTick();
+    if (!instructionsEl.value) return;
+    for (const code of instructionsEl.value.querySelectorAll("pre > code")) {
+      const text = code.textContent ?? "";
+      if (text.trim()) code.innerHTML = highlightWatCode(text);
     }
   },
   { immediate: true },
@@ -274,7 +290,7 @@ function onDragStart(e: MouseEvent) {
       @toggle-collapse="sidebarCollapsed = !sidebarCollapsed"
     />
     <div class="instructions">
-      <div class="instructions-content">
+      <div ref="instructionsEl" class="instructions-content">
         <h1>{{ currentLesson.title }}</h1>
         <div v-html="currentLesson.instructionsHtml"></div>
       </div>

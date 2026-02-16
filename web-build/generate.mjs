@@ -112,6 +112,10 @@ function instructionsToHtml(text) {
         let html = block.lines.map((l) => escapeHtml(l)).join("<br>");
         html = html.replace(/`([^`]+)`/g, "<code>$1</code>");
         html = html.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
+        html = html.replace(
+          /(?<!["=])(https?:\/\/[^\s<&]+)/g,
+          '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>',
+        );
         return `<p>${html}</p>`;
       }
     })
